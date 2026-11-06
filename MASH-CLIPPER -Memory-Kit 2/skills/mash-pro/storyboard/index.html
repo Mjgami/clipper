@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mash Pro Storyboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="../assets/mashworld.js"></script>
+<script src="../assets/mashpro.js"></script>
+<style>
+  :root { --mk-accent: #46f07a; --mk-accent-glow: rgba(70,240,122,.45); --mk-display: 'Archivo Black', sans-serif; --mk-serif: 'Instrument Serif', serif; --bg: #0b0f0c; --panel: #121813; --ink: #eef3ee; --dim: #8fa194; --accent: #46f07a; --warm: #ff8a3d; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: Inter, system-ui, sans-serif; }
+  header { padding: 48px 32px 8px; max-width: 1400px; margin: 0 auto; }
+  h1 { font-family: "Archivo Black", sans-serif; font-size: 44px; margin: 0; font-weight: 400; }
+  h1 em { font-family: "Instrument Serif", serif; font-weight: 400; color: var(--accent); }
+  header p { color: var(--dim); margin: 10px 0 0; font-size: 16px; line-height: 1.5; max-width: 760px; }
+  h2 { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; font-size: 30px; margin: 40px 0 16px; }
+  main { max-width: 1400px; margin: 0 auto; padding: 0 32px 64px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  .tile { background: var(--panel); border-radius: 14px; overflow: hidden; }
+  .frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #000; }
+  .cam { position: absolute; inset: -4%; background: url(frame.jpg) center / cover; will-change: transform, filter; }
+  .scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,0) 46%); }
+  .txt { position: absolute; left: 6%; right: 6%; bottom: 8%; text-align: center; font-family: "Archivo Black", sans-serif;
+         font-size: clamp(20px, 2.4vw, 30px); line-height: 1.1; color: #fff; text-shadow: 0 0 22px rgba(70,240,122,.45); }
+  .txt.serif { font-family: "Instrument Serif", serif; font-style: italic; font-size: clamp(24px, 2.8vw, 36px); }
+  .meta { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 14px; gap: 8px; }
+  .meta b { font-weight: 600; font-size: 15px; }
+  .meta span { color: var(--dim); font-size: 13px; }
+  .jump { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+  .jump a { color: var(--ink); text-decoration: none; font-size: 14px; padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); }
+  .jump a:hover { border-color: var(--accent); color: var(--accent); }
+  .grid { scroll-margin-top: 70px; }
+  .meta span i { color: var(--warm); font-style: normal; }
+  .dark { position: absolute; inset: 0; background: radial-gradient(circle at 50% 40%, #12301b, #040a05 70%); }
+  .stage { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; perspective: 1400px; }
+  .ui { width: 64%; border-radius: 10px; box-shadow: 0 18px 40px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08); display: block; }
+  .ui.sm { width: 46%; }
+  .stack .ui { position: absolute; }
+  .chip { position: absolute; padding: 6px 12px; border-radius: 999px; background: rgba(255,255,255,.12); backdrop-filter: blur(8px);
+          border: 1px solid rgba(255,255,255,.18); font: 600 13px Inter, sans-serif; color: #fff; }
+  .bgbox { position: absolute; inset: 0; overflow: hidden; }
+  .dbox { position: absolute; inset: 0; font-size: clamp(12px, 1.3vw, 16px); background: radial-gradient(circle at 50% 30%, #10261a, #040a05 75%); }
+  .bignum { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: 400 clamp(40px,5vw,64px) 'Archivo Black', sans-serif; color: #fff; text-shadow: 0 0 30px rgba(70,240,122,.5); }
+  .beatdot { position: absolute; top: 8%; right: 6%; width: 14px; height: 14px; border-radius: 50%; background: #ff8a3d; opacity: 0; z-index: 5; }
+  .bglabel { position: absolute; left: 0; right: 0; bottom: 10%; text-align: center; font: 400 clamp(22px,2.6vw,32px) "Instrument Serif", serif; font-style: italic; color: #fff; z-index: 5; }
+  @media (max-width: 600px) { header, main { padding-left: 16px; padding-right: 16px; } h1 { font-size: 32px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mash Pro <em>full preview</em></h1>
+  <p>Every Mash Pro effect from all four phases, playing on a loop. The orange label is the sound effect Mash Pro cues on that exact frame for /sound-design (at -17 dB).</p>
+  <nav class="jump"><a href="#shakes">Shake</a><a href="#types">Type</a><a href="#impacts">Impact</a><a href="#saas">SaaS</a><a href="#bgs">BG</a><a href="#maps">Map</a><a href="#data">Data</a><a href="#beat">Beat</a><a href="#presets">Presets</a></nav>
+</header>
+<main>
+  <h2>Mash Shake</h2>
+  <div class="grid" id="shakes"></div>
+  <h2>Mash Type</h2>
+  <div class="grid" id="types"></div>
+  <h2>Mash Impact <span style="font-size:18px;color:var(--dim)">(word + shake + sound in one call)</span></h2>
+  <div class="grid" id="impacts"></div>
+  <h2>Mash SaaS</h2>
+  <div class="grid" id="saas"></div>
+  <h2>Mash BG <span style="font-size:18px;color:var(--dim)">(colours pulled from your footage by palette.py)</span></h2>
+  <div class="grid" id="bgs"></div>
+  <h2>Mash Map</h2>
+  <div class="grid" id="maps"></div>
+  <h2>Mash Data</h2>
+  <div class="grid" id="data"></div>
+  <h2>Mash Beat <span style="font-size:18px;color:var(--dim)">(shakes and flashes locked to the music grid from beats.py)</span></h2>
+  <div class="grid" id="beat"></div>
+  <h2>Mash Presets <span style="font-size:18px;color:var(--dim)">(one line each: titles, lower thirds, callouts, transitions, end cards)</span></h2>
+  <div class="grid" id="presets"></div>
+</main>
+<script>
+  const SFX = (MP) => (MP.cues[0] ? MP.cues[0].cue : "none");
+  function tile(host, name, withText, textClass) {
+    const d = document.createElement("div"); d.className = "tile";
+    d.innerHTML = '<div class="frame"><div class="cam"></div>' + (withText ? '<div class="scrim"></div><div class="txt ' + (textClass || "") + '"></div>' : "") +
+      '</div><div class="meta"><b>' + name + '</b><span></span></div>';
+    document.getElementById(host).appendChild(d); return d;
+  }
+  function loop(d, build, wmul) {
+    const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.8 });
+    const MP = MashPro(tl, { fps: 30, width: d.querySelector(".frame").clientWidth * (wmul || 2) });
+    (window.__tls = window.__tls || []).push(tl);
+    build(tl, MP, d);
+    d.querySelector(".meta span").innerHTML = 'sfx <i>' + SFX(MP) + '</i>';
+  }
+
+  // Shakes
+  const probe = MashPro(gsap.timeline({ paused: true }));
+  probe.shakes.forEach((s) => {
+    const d = tile("shakes", s, false);
+    loop(d, (tl, MP) => { MP.shake(d.querySelector(".cam"), 0.6, s, { dur: 0.9 }); tl.set({}, {}, 2.0); });
+  });
+
+  // Text styles
+  const LINES = { scramble: "FOCUS MODE ON", typeOn: "Your edit is done.", tracking: "FOCUS MODE", blur: "No more noise.", glow: "Deep work." };
+  probe.styles.forEach((s) => {
+    const serif = s === "blur" || s === "glow";
+    const d = tile("types", s, true, serif ? "serif" : "");
+    const tx = d.querySelector(".txt"); tx.textContent = LINES[s] || "Your edit is done.";
+    loop(d, (tl, MP) => { const end = MP.text(tx, 0.4, s); MP.textOut(tx, Math.max(end, 1.2) + 1.1, "blur"); });
+  });
+
+  // Impacts
+  [["pop", "bounce", "BOOM."], ["stretch", "squeeze", "FOCUS"], ["scramble", "glitch", "LOCKED IN"], ["glow", "whiteFlicker", "Flow state."], ["drop", "lens", "100%"], ["mask", "warp", "Zero distractions"]].forEach(([ts, sh, word]) => {
+    const d = tile("impacts", ts + " + " + sh, true, ts === "glow" ? "serif" : "");
+    const tx = d.querySelector(".txt"); tx.textContent = word;
+    loop(d, (tl, MP) => { MP.impact(tx, d.querySelector(".cam"), 0.5, { text: ts, shake: sh }); MP.textOut(tx, 2.4, "blur"); });
+  });
+
+  // ---------- Phase 2: SaaS ----------
+  const PAL = ["#040a05", "#0a8a35", "#e77555", "#00d64f"];
+  function saasTile(name, inner) {
+    const d = document.createElement("div"); d.className = "tile";
+    d.innerHTML = '<div class="frame"><div class="dark"></div><div class="stage">' + inner + '</div></div><div class="meta"><b>' + name + '</b><span></span></div>';
+    document.getElementById("saas").appendChild(d); return d;
+  }
+  probe.screens.forEach((s, i) => {
+    const d = saasTile("screen " + s, '<img class="ui" src="ui' + ((i % 3) + 1) + '.jpg">');
+    loop(d, (tl, MP) => { MP.screen(d.querySelector(".ui"), 0.4, s); tl.to(d.querySelector(".ui"), { opacity: 0, duration: 0.25 }, 3.4); });
+  });
+  (() => { const d = saasTile("zoom (smooth, in and back)", '<img class="ui" src="ui2.jpg">');
+    loop(d, (tl, MP) => { MP.zoom(d.querySelector(".ui"), 0.5, { x: "70%", y: "35%", scale: 2, hold: 0.9 }); tl.set({}, {}, 3.4); }); })();
+  (() => { const d = saasTile("cursor + click", '<img class="ui" src="ui3.jpg">');
+    const st = d.querySelector(".stage"); const W = st.clientWidth, H = st.clientHeight;
+    loop(d, (tl, MP) => { MP.cursor(st, [[0.6, W * 0.75, H * 0.85], [1.4, W * 0.4, H * 0.42, true, d.querySelector(".ui")], [2.3, W * 0.62, H * 0.62, true]], { size: 20 }); tl.set({}, {}, 3.2); }); })();
+  ["flow", "ring"].forEach((m) => {
+    const d = saasTile("carousel " + m, '<img class="ui sm" src="ui1.jpg"><img class="ui sm" src="ui2.jpg"><img class="ui sm" src="ui3.jpg"><img class="ui sm" src="ui1.jpg">');
+    loop(d, (tl, MP) => { MP.carousel(d.querySelectorAll(".ui"), [[0.5, 1], [1.5, 2], [2.5, 3], [3.6, 0]], { mode: m, dur: 0.7 }); });
+  });
+  (() => { const d = saasTile("orbit (floating 3D)", '<img class="ui" src="ui1.jpg">');
+    loop(d, (tl, MP) => { MP.orbit(d.querySelector(".ui"), 0, { dur: 3.5 }); }); })();
+  (() => { const d = saasTile("parallax depth", '<img class="ui" src="ui2.jpg" data-depth="0.3"><div class="chip" data-depth="1" style="top:22%;left:14%">+38% retention</div><div class="chip" data-depth="0.8" style="bottom:20%;right:12%">Auto captions</div>');
+    loop(d, (tl, MP) => { MP.parallax(d.querySelectorAll("[data-depth]"), 0, { dur: 3.5, dist: 260 }); }); })();
+  (() => { const d = saasTile("fan stack", '<div class="stage stack"><img class="ui sm" src="ui3.jpg"><img class="ui sm" src="ui2.jpg"><img class="ui sm" src="ui1.jpg"></div>');
+    loop(d, (tl, MP) => { MP.fan(d.querySelectorAll(".ui"), 0.5, { gap: 260, spread: 8 }); tl.to(d.querySelectorAll(".ui"), { opacity: 0, duration: 0.3 }, 2.8); }); })();
+
+  // ---------- Phase 2: BG ----------
+  function bgTile(name, label) {
+    const d = document.createElement("div"); d.className = "tile";
+    d.innerHTML = '<div class="frame"><div class="bgbox"></div>' + (label ? '<div class="bglabel">' + label + '</div>' : "") + '</div><div class="meta"><b>' + name + '</b><span></span></div>';
+    document.getElementById("bgs").appendChild(d); return d;
+  }
+  probe.bgs.forEach((s) => {
+    const d = bgTile("bg " + s, "Deep work.");
+    loop(d, (tl, MP) => { MP.bg(d.querySelector(".bgbox"), { colors: PAL, style: s, dur: 6 }); tl.set({}, {}, 6); });
+  });
+  [["circle", "fluid", "aurora"], ["wipe", "radial", "spotlight"], ["blur", "linear", "fluid"], ["fade", "aurora", "radial"]].forEach(([tr, a, b]) => {
+    const d = bgTile("bgSwitch " + tr, "Next line.");
+    loop(d, (tl, MP) => { const box = d.querySelector(".bgbox"); MP.bg(box, { colors: PAL, style: a, dur: 3.5, sfx: false });
+      MP.bgSwitch(box, 1.2, { colors: ["#140806", "#e77555", "#ff9a3c", "#00d64f"], style: b, transition: tr, dur: 3 }); tl.set({}, {}, 3.4); });
+  });
+  (() => { const d = document.createElement("div"); d.className = "tile";
+    d.innerHTML = '<div class="frame"><div class="cam"></div><div class="bgbox"></div></div><div class="meta"><b>lightLeak over footage</b><span></span></div>';
+    document.getElementById("bgs").appendChild(d);
+    loop(d, (tl, MP) => { MP.lightLeak(d.querySelector(".bgbox"), 0.4, { dur: 1.6 }); tl.set({}, {}, 2.4); }); })();
+
+  // ---------- Phase 3: Map ----------
+  function boxTile(host, name, cls) {
+    const d = document.createElement("div"); d.className = "tile";
+    d.innerHTML = '<div class="frame"><div class="' + (cls || "dbox") + '"></div></div><div class="meta"><b>' + name + '</b><span></span></div>';
+    document.getElementById(host).appendChild(d); return d;
+  }
+  const MUM = [72.88, 19.08], DXB = [55.27, 25.2], LON = [-0.13, 51.5], NYC = [-74, 40.7];
+  (() => { const d = boxTile("maps", "flyTo + highlight + pin");
+    loop(d, (tl, MP) => { const m = MP.map(d.querySelector(".dbox"), { center: [10, 25], zoom: 1 });
+      m.flyTo(0.3, [79, 22], 4.2, { dur: 1.6 }); m.highlight(1.7, "India"); m.pin(2.1, MUM, "Mumbai"); tl.set({}, {}, 4); }); })();
+  (() => { const d = boxTile("maps", "route draw (Mumbai to Dubai to London)");
+    loop(d, (tl, MP) => { const m = MP.map(d.querySelector(".dbox"), { center: [38, 33], zoom: 2.6 });
+      m.pin(0.3, MUM, "Mumbai"); m.route(0.6, MUM, DXB, { dur: 0.9 }); m.pin(1.4, DXB, "Dubai");
+      m.route(1.7, DXB, LON, { dur: 1.2 }); m.pin(2.8, LON, "London"); tl.set({}, {}, 4.2); }); })();
+  (() => { const d = boxTile("maps", "world pins + routes");
+    loop(d, (tl, MP) => { const m = MP.map(d.querySelector(".dbox"), { center: [0, 30], zoom: 1.15, colors: { route: "#ff8a3d", pin: "#46f07a" } });
+      m.pin(0.3, NYC, "New York"); m.pin(0.5, LON, "London"); m.pin(0.7, MUM, "Mumbai");
+      m.route(1.0, LON, NYC, { dur: 1 }); m.route(1.3, LON, MUM, { dur: 1 }); m.flyTo(2.6, [20, 35], 1.6, { dur: 1.4 }); tl.set({}, {}, 4.4); }); })();
+
+  // ---------- Phase 3: Data ----------
+  (() => { const d = boxTile("data", "bars (live values)");
+    loop(d, (tl, MP) => { MP.bars(d.querySelector(".dbox"), 0.4, [{ label: "Jan", value: 1200 }, { label: "Feb", value: 2100 }, { label: "Mar", value: 3400 }, { label: "Apr", value: 5200, color: "#ff8a3d" }]); tl.set({}, {}, 3.4); }); })();
+  (() => { const d = boxTile("data", "ring (progress)");
+    loop(d, (tl, MP) => { MP.ring(d.querySelector(".dbox"), 0.4, 87, { label: "watch time" }); tl.set({}, {}, 3.2); }); })();
+  (() => { const d = boxTile("data", "line chart draw");
+    loop(d, (tl, MP) => { MP.line(d.querySelector(".dbox"), 0.4, [3, 4, 3.6, 5.2, 6.1, 5.8, 8.4, 11]); tl.set({}, {}, 3.4); }); })();
+  (() => { const d = boxTile("data", "count (rolling number)");
+    d.querySelector(".dbox").innerHTML = '<div class="bignum">0</div>';
+    loop(d, (tl, MP) => { MP.count(d.querySelector(".bignum"), 0.4, 0, 1250000, { dur: 1.6, suffix: "+" }); tl.set({}, {}, 3.4); }); })();
+
+  // ---------- Phase 3: Beat ----------
+  const BEATS = Array.from({ length: 16 }, (_, i) => +(0.2 + i * 60 / 124).toFixed(3));  // 124 bpm grid, as beats.py writes it
+  [["beatShake every beat", (MP, cam) => MP.beatShake(cam, BEATS, "quick", { amp: 0.6 })],
+   ["beatShake on downbeats (bounce)", (MP, cam) => MP.beatShake(cam, BEATS, "bounce", { every: 4, amp: 0.8 })],
+   ["beatFlash every 2nd beat", (MP, cam, d) => MP.beatFlash(d.querySelector(".flashL"), BEATS, { every: 2, peak: 0.45 })]].forEach(([name, fn]) => {
+    const d = document.createElement("div"); d.className = "tile";
+    d.innerHTML = '<div class="frame"><div class="cam"></div><div class="flashL" style="position:absolute;inset:0;background:#fff;opacity:0"></div><div class="beatdot"></div></div><div class="meta"><b>' + name + '</b><span></span></div>';
+    document.getElementById("beat").appendChild(d);
+    loop(d, (tl, MP) => { fn(MP, d.querySelector(".cam"), d); MP.beatFlash(d.querySelector(".beatdot"), BEATS, { peak: 1, dur: 0.2 }); tl.set({}, {}, 7.6); });
+  });
+
+  // ---------- Phase 4: Presets ----------
+  function presetTile(name, inner) {
+    const d = document.createElement("div"); d.className = "tile";
+    d.innerHTML = '<div class="frame">' + inner + '<div class="lay" style="position:absolute;inset:0"></div></div><div class="meta"><b>' + name + '</b><span></span></div>';
+    document.getElementById("presets").appendChild(d); return d;
+  }
+  const FOOT = '<div class="cam"></div><div class="scrim"></div>', DARK = '<div class="dbox"></div>';
+  (() => { const d = presetTile("title (lead + key word + shake)", DARK);
+    loop(d, (tl, MP) => { MP.title(d.querySelector(".lay"), 0.4, { lead: "this is how you", word: "FOCUS", sub: "three rules, zero noise", cam: d.querySelector(".frame"), hold: 2.2 }); tl.set({}, {}, 3.6); }, 1); })();
+  (() => { const d = presetTile("lowerThird", FOOT);
+    loop(d, (tl, MP) => { MP.lowerThird(d.querySelector(".lay"), 0.4, { name: "Sahil Sharma", role: "video editor", hold: 2.4 }); tl.set({}, {}, 3.4); }, 1); })();
+  (() => { const d = presetTile("callout (points at the screen)", FOOT);
+    const f = d.querySelector(".frame"), W = f.clientWidth, H = f.clientHeight;
+    loop(d, (tl, MP) => { MP.callout(d.querySelector(".lay"), 0.4, { x: W * 0.17, y: H * 0.5, dx: W * 0.12, dy: -H * 0.25, text: "fireplace on loop", hold: 2.2 }); tl.set({}, {}, 3.2); }, 1); })();
+  (() => { const d = presetTile("quote", DARK);
+    loop(d, (tl, MP) => { MP.quote(d.querySelector(".lay"), 0.3, { text: "Edit like nobody is watching.", by: "Your Brand" }); tl.set({}, {}, 3.4); }, 1); })();
+  (() => { const d = presetTile("steps", DARK);
+    loop(d, (tl, MP) => { MP.steps(d.querySelector(".lay"), 0.3, ["Hook", "Story", "Offer"], { each: 0.5 }); tl.set({}, {}, 3.2); }, 1); })();
+  (() => { const d = presetTile("endCard", DARK);
+    loop(d, (tl, MP) => { MP.endCard(d.querySelector(".lay"), 0.3, { line: "Now you edit.", cta: "Grab the free kit", handle: "link in the description" }); tl.set({}, {}, 3.6); }, 1); })();
+  probe.transitions.forEach((tr) => {
+    const d = presetTile("transition " + tr, '<div class="sceneA" style="position:absolute;inset:0"><div class="cam"></div></div><div class="sceneB" style="position:absolute;inset:0"><div class="dbox"></div><div class="bignum" style="font-size:34px">Scene two</div></div>');
+    loop(d, (tl, MP) => { MP.transition(d.querySelector(".sceneA"), d.querySelector(".sceneB"), 0.9, tr); tl.set({}, {}, 2.6); }, 1);
+  });
+</script>
+</body>
+</html>

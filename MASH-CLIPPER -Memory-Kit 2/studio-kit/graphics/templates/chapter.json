@@ -1,0 +1,10 @@
+{
+  "description": "VSL / YouTube section title: big chapter number, rule, title and kicker line.",
+  "duration": 3.5,
+  "variables": [
+    { "id": "number", "type": "string", "label": "Chapter number", "default": "01" },
+    { "id": "title", "type": "string", "label": "Title (*word* = accent)", "default": "Why *ugly* ads win" },
+    { "id": "kicker", "type": "string", "label": "Kicker line", "default": "" },
+    { "id": "size", "type": "number", "label": "Title size (% of short side)", "default": 8, "min": 4, "max": 14 }
+  ]
+}

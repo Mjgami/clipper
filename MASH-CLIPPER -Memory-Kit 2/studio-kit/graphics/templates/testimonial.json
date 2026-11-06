@@ -1,0 +1,11 @@
+{
+  "description": "Client result: optional screenshot (Slack/Stripe/DM proof image) + quote card with name and result chip. *word* = accent.",
+  "duration": 6,
+  "variables": [
+    { "id": "image", "type": "string", "label": "Screenshot path (optional)", "default": "" },
+    { "id": "quote", "type": "string", "label": "Quote (*word* = accent)", "default": "We hit *$250k* for the month off one ad angle." },
+    { "id": "name", "type": "string", "label": "Name", "default": "Client name" },
+    { "id": "result", "type": "string", "label": "Result chip", "default": "$250k / month" },
+    { "id": "size", "type": "number", "label": "Quote size (% of short side)", "default": 5.4, "min": 2.5, "max": 8 }
+  ]
+}

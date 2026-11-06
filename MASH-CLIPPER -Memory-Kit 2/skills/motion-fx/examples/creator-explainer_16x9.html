@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Creator Explainer demo</title>
+    <script src="gsap.min.js"></script>
+    <script src="motionkit.js"></script>
+    <script src="creatorfx.js"></script>
+    <link rel="stylesheet" href="motionkit.css" />
+    <link rel="stylesheet" href="creatorfx.css" />
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight.ttf") format("truetype"); font-weight: 100 900; }
+      @font-face { font-family: "Instrument Serif"; src: url("fonts/InstrumentSerif-Italic.ttf") format("truetype"); font-style: italic; }
+      /* Creator Explainer look: graphite stage, warm white text, ONE accent picked opposite the room light */
+      :root { --mk-bg: #0b0d12; --mk-text: #f5f2ea; --mk-muted: rgba(245, 242, 234, .62); --mk-accent: #3ee0ff; --mk-accent-glow: rgba(62, 224, 255, .5); --mk-display: "Inter Tight"; --mk-serif: "Instrument Serif"; }
+      body { margin: 0; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--mk-bg); font-family: var(--mk-display); color: var(--mk-text); }
+      /* stand-in for the speaker's footage (replace with <video> inside #cam) */
+      #camWrap { position: absolute; inset: 0; overflow: hidden; z-index: 5; }
+      #cam { position: absolute; inset: 0; background: radial-gradient(40% 55% at 64% 46%, #8c3a5c 0%, #4a1c34 45%, #1a0b14 100%); }
+      #cam .who { position: absolute; left: 1080px; top: 250px; width: 420px; height: 830px; border-radius: 210px 210px 40px 40px; background: linear-gradient(#2a1520, #120a10); }
+      #scrimL { position: absolute; inset: 0; z-index: 6; opacity: 0; background: linear-gradient(90deg, rgba(8, 9, 12, .78) 0%, rgba(8, 9, 12, .45) 40%, rgba(8, 9, 12, 0) 62%); }
+      #bg, #bg2 { z-index: 1; }
+      #pipRing { position: absolute; left: 1361px; top: 739px; width: 499px; height: 281px; box-sizing: border-box; border-radius: 16px; border: 2px solid var(--mk-accent); box-shadow: 0 0 30px var(--mk-accent-glow); z-index: 7; opacity: 0; }
+      #boxRing { position: absolute; left: 1090px; top: 70px; width: 760px; height: 940px; box-sizing: border-box; border-radius: 36px; border: 6px solid rgba(255, 255, 255, .95); z-index: 7; opacity: 0; }
+      .txt { position: absolute; left: 110px; z-index: 20; }
+      .lead { font-family: var(--mk-serif); font-style: italic; font-size: 54px; color: var(--mk-text); }
+      .big { font-weight: 900; font-size: 128px; letter-spacing: -0.015em; word-spacing: .08em; line-height: .96; text-transform: uppercase; }
+      .cy { color: var(--mk-accent); text-shadow: 0 0 30px var(--mk-accent-glow); }
+      .o0 { opacity: 0; }
+      #ink { color: #1f1e1d; z-index: 20; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="14">
+      <div id="bg" class="o0"></div>
+      <div id="bg2" class="o0"></div>
+      <div id="camWrap"><div id="cam"><div class="who"></div></div></div>
+      <div id="scrimL"></div>
+      <div id="pipRing"></div>
+      <div id="boxRing"></div>
+
+      <!-- beat 1: decoder hero word -->
+      <div class="txt mk-lead" id="l1" style="top: 320px; font-size: 54px"></div>
+      <div class="txt big cf-dec cy o0" id="hero" style="top: 400px">AI EDITED</div>
+
+      <!-- beat 2: social proof posts -->
+      <div id="posts"></div>
+
+      <!-- beat 3: hero folder -->
+      <div class="txt lead o0" id="l3" style="top: 250px">something</div>
+      <div class="txt big o0" id="gold" style="top: 316px"><span class="cf-gold">GOLDEN</span></div>
+
+      <!-- beat 5: light studio + progress bar -->
+      <div class="txt big o0" id="ink" style="top: 360px; font-size: 96px">START <span style="font-family: var(--mk-serif); font-style: italic; font-weight: 400; text-transform: none">to</span> END</div>
+      <div class="cf-bar cf-on-light o0" id="bar" style="left: 110px; top: 560px; width: 900px">
+        <div class="cf-track"></div><div class="cf-fill"></div><div class="cf-rail"><div class="cf-head"></div></div>
+        <div class="cf-lab" style="left: 30px">Start</div><div class="cf-lab" style="right: 30px">End</div>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const MK = MotionKit(tl, { fps: 30 });
+      const CF = CreatorFX(tl, { root: "#root", fps: 30 });
+      const scr = (a, b) => { tl.to("#scrimL", { opacity: 1, duration: 0.3 }, a); tl.to("#scrimL", { opacity: 0, duration: 0.25 }, b); };
+
+      /* beat 1 (0 - 2.6): serif lead + decoder word, one smooth zoom on the impact line */
+      scr(0.1, 8.1); // one continuous left scrim behind beats 1-3
+      MK.lead("#l1", [["this", 0.3], ["video", 0.42], ["was", 0.54]]);
+      CF.decode("#hero", 0.6);
+      MK.zoom("#cam", 0.4, { to: 1.08, inDur: 0.8, hold: 1.0 });
+      MK.out(["#l1", "#hero"], 2.45);
+
+      /* beat 2 (2.7 - 4.9): real social proof posts (use the user's chosen real posts in a real edit) */
+      [["p1", "Jane Doe", "@janedoe", "This took 15 minutes"], ["p2", "Sam Lee", "@samlee", "Motion graphics just got easy"], ["p3", "Ana Ruiz", "@anaruiz", "I made this from one prompt"]]
+        .forEach(([id, n, h, t], i) => { CF.post("#posts", { id, name: n, handle: h, text: t, x: 110, y: 300 + i * 128 }); CF.rise("#" + id, 2.8 + i * 0.16); });
+      MK.out(["#p1", "#p2", "#p3"], 4.75);
+
+      /* beat 3 (5 - 8.2): "something GOLDEN" + hero folder opens (gold only because the line says golden) */
+      MK.blurRise("#l3", 5.05);
+      tl.fromTo("#gold", { opacity: 0, y: 34 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 5.3);
+      CF.shimmer("#gold .cf-gold", 5.45, 1.0);
+      CF.folder({ id: "f1", x: 230, y: 500, scale: 1, label: "My Editing Kit", papers: ["YouTube", "SaaS", "Vox", "Reels"], tone: "gold" });
+      CF.rise("#f1", 5.4, 0.6);
+      CF.openFolder("f1", 6.1);
+      MK.out(["#l3", "#gold", "#f1"], 8.0);
+
+      /* beat 4 (8.2 - 10): picture-in-picture over a graphite stage */
+      tl.to("#bg", { opacity: 1, duration: 0.01 }, 8.15);
+      CF.lightStage("#bg", ["#1b2440", "#22183a", "#0f2a33", "#18203a"], 14, "#0b0d12");
+      CF.pipIn({ wrap: "#camWrap", t: 8.25, ring: "#pipRing" });
+      CF.pipOut({ wrap: "#camWrap", t: 9.7, ring: "#pipRing" });
+
+      /* beat 5 (10.2 - 14): light studio: speaker in a rounded box, progress bar on the free side */
+      tl.set("#bg", { opacity: 0 }, 10.1);
+      CF.lightStage("#bg2", null, 14);
+      tl.to("#bg2", { opacity: 1, duration: 0.01 }, 10.1);
+      CF.camBox({ wrap: "#camWrap", t: 10.2, box: { x: 1090, y: 70, w: 760, h: 940, r: 36 }, ring: "#boxRing" });
+      MK.blurRise("#ink", 10.7);
+      CF.rise("#bar", 11.0);
+      CF.progress("#bar", 11.4, 1.1);
+      CF.camFull({ wrap: "#camWrap", t: 13.2, ring: "#boxRing" });
+      MK.out(["#ink", "#bar"], 13.1);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

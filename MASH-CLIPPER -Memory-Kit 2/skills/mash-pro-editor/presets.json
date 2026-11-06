@@ -1,0 +1,147 @@
+{
+  "about": "Mash Pro Editor presets. Each recipe lists WHEN something happens (tied to the words) and the exact call. t = a word's start time from words.py. Colours and fonts always come from the brand kit or /motion-theme, never from the preset.",
+  "presets": [
+    {
+      "id": "reel-hook", "name": "Mash Reel Hook", "format": "9:16", "base_skill": "vertical-edit", "base_look": "Bold Impact or Ali Abdaal Clean",
+      "pace": "a visual change every 1.5-2.5 s", "captions": "kinetic captions, one glowing key word per phrase",
+      "recipe": [
+        { "when": "first 0-2 s: the hook line", "call": "MP.title('#front', t, { at: 'bottom', lead: '<first words>', word: '<HOOK WORD>', cam: '#cam', shake: 'lens', hold: 1.4 })" },
+        { "when": "every key word / number", "call": "MP.impact('#kw1', '#cam', t, { text: 'pop', shake: 'bounce' })", "limit": "one heavy shake per 3-4 s" },
+        { "when": "lists in the speech", "call": "MP.steps('#front', t, ['one', 'two', 'three'], { each: <gap between words> , top: '62%' })" },
+        { "when": "last line", "call": "MP.endCard('#front', t, { line: '<closing line>', cta: '<follow / link>' })" }
+      ],
+      "sound": "hit on hook, pop on key words, swipe on the end card underline; soft music"
+    },
+    {
+      "id": "youtube-explainer", "name": "Mash YouTube Explainer", "format": "16:9", "base_skill": "horizontal-edit", "base_look": "Creator Explainer",
+      "pace": "calm: a graphic every 4-8 s, smooth zooms on impact lines", "captions": "key words only, or none",
+      "recipe": [
+        { "when": "first time the speaker appears", "call": "MP.lowerThird('#front', t, { name: '<name>', role: '<role>', hold: 3 })" },
+        { "when": "they mention something visible", "call": "MP.callout('#front', t, { x, y, text: '<label>', hold: 2.5 })" },
+        { "when": "a list", "call": "MP.steps('#side', t, items, { each: <gap>, left: '58%' })" },
+        { "when": "impact line", "call": "MK.zoom('#cam', t, { to: 1.1 })" },
+        { "when": "new section", "call": "MP.transition('#sceneA', '#sceneB', t, 'whip')" },
+        { "when": "quotable line", "call": "MP.quote('#full', t, { text: '<line>', by: '<speaker>' })" }
+      ],
+      "sound": "swipe on lower third, pop on callouts/steps, whoosh on section whips; voice-only is fine"
+    },
+    {
+      "id": "saas-launch", "name": "Mash SaaS Launch", "format": "16:9 (and 9:16 via resize)", "base_skill": "saas-motion", "base_look": "Dark Neon or Clean SaaS Glass",
+      "pace": "fast: new beat every 1-2 s", "captions": "big kinetic words as the copy",
+      "recipe": [
+        { "when": "intro", "call": "MP.bg('#bg', { colors, style: 'fluid', dur }); MP.text('#h1', t, 'scramble')" },
+        { "when": "product appears", "call": "MP.screen('.ui', t, 'rise3d')" },
+        { "when": "feature demo", "call": "MP.cursor('#stage', [[t, x, y], [t2, x2, y2, true, '.ui']]); MP.zoom('.ui', t2, { x: '70%', y: '30%', scale: 1.8, hold: 1 })" },
+        { "when": "several screens", "call": "MP.carousel('.shot', [[t, 1], [t2, 2]], { mode: 'flow' })" },
+        { "when": "every 1-2 lines", "call": "MP.bgSwitch('#bg', t, { colors, style: 'aurora', transition: 'circle' })" },
+        { "when": "proof number (real only)", "call": "MP.count('#n', t, 0, <real number>, { suffix: '+' })" },
+        { "when": "close", "call": "MP.endCard('#front', t, { line: '<product>', cta: '<try it free>' })" }
+      ],
+      "sound": "whoosh on screen entrances, click on cursor clicks, swipe on carousel, pop on numbers"
+    },
+    {
+      "id": "apple-glass", "name": "Mash Apple Glass", "format": "16:9", "base_skill": "saas-motion", "base_look": "Clean SaaS Glass",
+      "pace": "slow and premium: one idea per 2-3 s", "captions": "thin serif + bold pairs, lots of space",
+      "recipe": [
+        { "when": "open", "call": "MP.bg('#bg', { colors, style: 'aurora', dur }); MP.text('#h1', t, 'tracking')" },
+        { "when": "device / UI", "call": "MP.screen('.ui', t, 'unfold'); MP.orbit('.ui', t, { dur: 4 })" },
+        { "when": "several features", "call": "MP.fan('.card', t, { spread: 7 })" },
+        { "when": "scene change", "call": "MP.transition('#a', '#b', t, 'blur')" }
+      ],
+      "sound": "very few: shimmer on reveals, one hit on the final title"
+    },
+    {
+      "id": "vox-map", "name": "Mash Vox Map", "format": "16:9", "base_skill": "horizontal-edit", "base_look": "Vox Explainer",
+      "pace": "explainer: map moves follow the narration", "captions": "key words",
+      "recipe": [
+        { "when": "a place is named", "call": "const m = MP.map('#map', { center, zoom: 1 }); m.flyTo(t, [lon, lat], 4)" },
+        { "when": "the country matters", "call": "m.highlight(t, '<Country name as in mashworld.js>')" },
+        { "when": "a city", "call": "m.pin(t, [lon, lat], '<City>')" },
+        { "when": "movement between places", "call": "m.route(t, [lonA, latA], [lonB, latB], { dur: 1.2 })" },
+        { "when": "a trend", "call": "MP.line('#chart', t, [real values])" },
+        { "when": "section change", "call": "MP.transition('#a', '#b', t, 'push')" }
+      ],
+      "sound": "whoosh on flyTo, shimmer on highlight, pop on pins, swipe on routes"
+    },
+    {
+      "id": "data-story", "name": "Mash Data Story", "format": "9:16 or 16:9", "base_skill": "vertical-edit / horizontal-edit", "base_look": "Finance",
+      "pace": "one number per line", "captions": "kinetic captions",
+      "recipe": [
+        { "when": "a headline number", "call": "MP.count('#n', t, 0, <real>, { prefix: '$', suffix: 'K' })" },
+        { "when": "comparison", "call": "MP.bars('#bars', t, [{ label, value }])" },
+        { "when": "a percentage", "call": "MP.ring('#ring', t, <pct>, { label })" },
+        { "when": "growth over time", "call": "MP.line('#line', t, [values])" },
+        { "when": "the twist (once)", "call": "MP.transition('#a', '#b', t, 'glitch')" }
+      ],
+      "sound": "swipe on charts, pop as numbers land. Only real numbers from the user or the script."
+    },
+    {
+      "id": "beat-edit", "name": "Mash Beat Edit", "format": "9:16", "base_skill": "vertical-edit", "base_look": "Bold Impact",
+      "pace": "cuts on the beat grid", "captions": "single words on beats",
+      "recipe": [
+        { "when": "before building", "call": "python3 mash-pro/scripts/beats.py music.mp3 --out beats.json" },
+        { "when": "every downbeat", "call": "MP.beatShake('#cam', beats.downbeats, 'bounce', { amp: 0.7 })" },
+        { "when": "every 2nd beat", "call": "MP.beatFlash('#flash', beats.beats, { every: 2, peak: 0.3 })" },
+        { "when": "word per beat", "call": "MP.onBeats(beats.beats, (t, i) => MP.text('#w' + i, t, 'pop', { sfx: false }), { every: 2 })" },
+        { "when": "the drop", "call": "MP.transition('#a', '#b', <drop beat>, 'whip')" }
+      ],
+      "sound": "the music carries the beat: no SFX on beat effects, music louder than usual (no voice)"
+    },
+    {
+      "id": "podcast-clip", "name": "Mash Podcast Clip", "format": "9:16", "base_skill": "vertical-edit", "base_look": "Podcast Clip",
+      "pace": "speech-led, tight", "captions": "kinetic captions",
+      "recipe": [
+        { "when": "first", "call": "python3 mash-pro/scripts/silence.py ep.mp4 --xml cut.xml; python3 mash-pro/scripts/resize.py ep_cut.mp4 --to 9:16 --focus <speaker x 0-1>" },
+        { "when": "guest appears", "call": "MP.lowerThird('#front', t, { name, role, hold: 3 })" },
+        { "when": "the best line (once)", "call": "MP.impact('#kw', '#cam', t, { text: 'stretch', shake: 'squeeze' })" }
+      ],
+      "sound": "voice first; one hit on the best line; music optional and very soft"
+    },
+    {
+      "id": "real-estate", "name": "Mash Real Estate", "format": "9:16", "base_skill": "vertical-edit", "base_look": "Agent Story or Luxury Walkthrough",
+      "pace": "warm and smooth", "captions": "serif lead + bold key word",
+      "recipe": [
+        { "when": "agent on camera", "call": "MP.lowerThird('#front', t, { name: '<agent>', role: '<agency>', hold: 3 })" },
+        { "when": "a feature is shown", "call": "MP.callout('#front', t, { x, y, text: '<feature>', hold: 2 })" },
+        { "when": "location", "call": "const m = MP.map('#map', { center, zoom: 6 }); m.pin(t, [lon, lat], '<area>')" },
+        { "when": "golden-hour shots", "call": "MP.lightLeak('#over', t, { color: '#ffb36b' })" },
+        { "when": "room to room", "call": "MP.transition('#a', '#b', t, 'blur')" }
+      ],
+      "sound": "shimmer on light leaks, pop on callouts, soft music"
+    },
+    {
+      "id": "construction", "name": "Mash Construction", "format": "9:16", "base_skill": "vertical-edit", "base_look": "Project Progress or Renovation Before/After",
+      "pace": "punchy", "captions": "bold key words",
+      "recipe": [
+        { "when": "process explained", "call": "MP.steps('#front', t, ['Demo', 'Frame', 'Finish'], { each: <gap> })" },
+        { "when": "progress", "call": "MP.bars('#bars', t, [{ label: 'Week 1', value }, ...])" },
+        { "when": "heavy moment (machine, slam)", "call": "MP.shake('#cam', t, 'bounce')" },
+        { "when": "before -> after", "call": "MP.transition('#before', '#after', t, 'whip')" }
+      ],
+      "sound": "hit on heavy moments, whoosh on before/after"
+    },
+    {
+      "id": "creator", "name": "Mash Creator", "format": "16:9", "base_skill": "horizontal-edit", "base_look": "Creator Explainer (CreatorFX)",
+      "pace": "creator YouTube: face + screen", "captions": "English key words only if the speech is not English",
+      "recipe": [
+        { "when": "screen recording / app", "call": "CreatorFX PiP and screen showcase (motion-fx/references/creator-effects.md)" },
+        { "when": "section title", "call": "MP.title('#front', t, { lead: '<small line>', word: '<BIG WORD>', hold: 1.6 })" },
+        { "when": "intro", "call": "MP.lowerThird('#front', t, { name, role, hold: 3 })" },
+        { "when": "pointing at UI", "call": "MP.callout('#front', t, { x, y, text })" },
+        { "when": "outro", "call": "MP.endCard('#front', t, { line, cta, handle })" }
+      ],
+      "sound": "light: pop and swipe only, or voice only"
+    },
+    {
+      "id": "bold-impact", "name": "Mash Bold Impact", "format": "9:16", "base_skill": "vertical-edit", "base_look": "Bold Impact",
+      "pace": "hype: something every second", "captions": "huge single words",
+      "recipe": [
+        { "when": "hook", "call": "MP.text('#h1', t, 'scramble'); MP.shake('#cam', t + 0.3, 'squeeze')" },
+        { "when": "punchlines", "call": "MP.impact('#kw', '#cam', t, { text: 'stretch', shake: 'glitch' }); MP.shake('#cam', t, 'whiteFlicker', { sfx: false })" },
+        { "when": "section change", "call": "MP.transition('#a', '#b', t, 'glitch')" },
+        { "when": "close", "call": "MP.endCard('#front', t, { line, cta, style: 'drop' })" }
+      ],
+      "sound": "hits on punchlines, clicks on glitches; keep SFX at -17 dB so it never gets harsh"
+    }
+  ]
+}

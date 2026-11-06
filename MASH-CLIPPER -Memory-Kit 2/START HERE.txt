@@ -1,0 +1,30 @@
+MASH EDITING MEMORY KIT
+=======================
+Everything needed to make another Claude edit videos exactly the way this was done: the editing skills, the
+clipper, the effects kit, a brand-neutral Studio kit, AND the full working memory (how prompts were given,
+every correction, every rule) so you never have to guide it again.
+
+INSTALL (2 minutes)
+- Mac: double-click "1. Install (Mac).command"  (blocked? right-click > Open)
+- Windows: right-click "1. Install (Windows).ps1" > Run with PowerShell
+It needs Claude Code, Node 22+ and ffmpeg (the installer tells you if one is missing).
+
+USE
+Open Claude Code and just say:   use MASH Clipper on <YouTube link or file path>
+Claude automatically loads the memory (the /mash-playbook skill), asks how many clips, finds story clips
+(question + answer for interviews), shows raw clips, a clickable style picker, a PNG storyboard, a 720p
+preview, then the 4K final and a reel cover. You only approve or redirect at each step.
+
+WHAT IS INSIDE
+- skills/        72 editing skills: mash-clipper (front door), mash-playbook (the memory), Mash Pro editor + effects,
+                 motion-fx, vertical/horizontal-edit, edit-director, edit-qa, sound-design, saas-motion, HyperFrames,
+                 captions, kinetic type, lower thirds, colour, beat sync and more
+- memory/        the same memory as plain readable files (01-10): how the user works, workflow, clip rules,
+                 editing rules, styles/presets, tech cookbook, mistakes never to repeat, prompt glossary, QA lists,
+                 and a start prompt to paste into any new Claude session
+- studio-kit/    optional recipe-driven CLI (cuts/captions/graphics/mix); brand-neutral
+- brands/_template   starting point if you need a brand kit
+No videos, no personal or brand data are included.
+
+IF SOMETHING GOES WRONG
+Say "read /mash-playbook again and fix it". The playbook lists every past mistake and its fix.

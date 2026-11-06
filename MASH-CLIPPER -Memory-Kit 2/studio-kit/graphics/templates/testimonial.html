@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" data-composition-variables='__VARS__'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <!--__HEAD__-->
+    <style>
+      #scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: calc(var(--u) * 4);
+        padding: calc(var(--u) * 8) calc(var(--u) * 6);
+      }
+      .landscape #scene { flex-direction: row; gap: calc(var(--u) * 6); padding: calc(var(--u) * 8) calc(var(--u) * 10); }
+      #shotwrap {
+        display: block;
+        max-width: 88%;
+        max-height: 48%;
+        border-radius: calc(var(--u) * var(--radius) / 10.8);
+        overflow: hidden;
+        box-shadow: 0 calc(var(--u) * 1.2) calc(var(--u) * 4) rgba(0, 0, 0, 0.45);
+      }
+      .landscape #shotwrap { max-width: 48%; max-height: 80%; }
+      #shot { display: block; max-width: 100%; max-height: calc(var(--H) * 0.48px); object-fit: contain; }
+      .landscape #shot { max-height: calc(var(--H) * 0.8px); }
+      #card {
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--u) * 2);
+        max-width: calc(var(--u) * 88);
+        padding: calc(var(--u) * 4) calc(var(--u) * 4.4);
+        border-radius: calc(var(--u) * var(--radius) / 10.8);
+        background: var(--surface);
+      }
+      .portrait #card { width: 86%; max-width: none; }
+      .landscape #card { max-width: 46%; }
+      #mark {
+        display: block;
+        height: calc(var(--u) * 5);
+        font-family: var(--fontDisplay);
+        font-weight: 800;
+        font-size: calc(var(--u) * 12);
+        line-height: 0.9;
+        color: var(--accent);
+      }
+      #quote {
+        font-family: var(--fontBody);
+        font-weight: 500;
+        font-size: calc(var(--u) * var(--size));
+        line-height: 1.35;
+        color: var(--cardText);
+      }
+      .w { display: inline-block; }
+      .wi { display: inline-block; }
+      .accent .wi { color: var(--accent); font-weight: 700; }
+      #who { display: flex; flex-wrap: wrap; align-items: center; gap: calc(var(--u) * 1.6); }
+      #name {
+        display: block;
+        font-family: var(--fontDisplay);
+        font-weight: var(--displayWeight);
+        text-transform: var(--displayCase);
+        font-size: calc(var(--u) * 3.4);
+        color: var(--cardText);
+      }
+      #result {
+        display: block;
+        padding: calc(var(--u) * 0.8) calc(var(--u) * 1.8);
+        border-radius: calc(var(--u) * 4);
+        background: var(--accent);
+        color: var(--accentInk);
+        font-family: var(--fontBody);
+        font-weight: 700;
+        font-size: calc(var(--u) * 2.8);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="__ORIENT__" data-composition-id="main" data-start="0" data-duration="__DUR__" data-width="__W__" data-height="__H__">
+      <div id="scene" class="clip" data-start="0" data-duration="__DUR__" data-track-index="0">
+        <div id="shotwrap"><img id="shot" alt="" src="vendor/blank.png" data-var-src="image" /></div>
+        <div id="card">
+          <span id="mark">&ldquo;</span>
+          <div id="quote">Quote</div>
+          <div id="who"><span id="name">Name</span><span id="result">Result</span></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const v = Kit.vars();
+      Kit.setup(v);
+      const D = Kit.duration();
+      const words = Kit.words(document.getElementById("quote"), v.quote);
+      Kit.text(document.getElementById("name"), v.name);
+      Kit.text(document.getElementById("result"), v.result);
+      if (!v.result) document.getElementById("result").style.display = "none";
+      if (!v.image) document.getElementById("shotwrap").style.display = "none";
+
+      const tl = gsap.timeline({ paused: true });
+      if (v.image) {
+        tl.fromTo("#shotwrap", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0.05);
+        tl.fromTo("#shot", { scale: 1.06 }, { scale: 1, duration: D, ease: "none" }, 0);
+      }
+      tl.fromTo("#card", { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, v.image ? 0.3 : 0.05);
+      tl.fromTo(words, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: Math.min(0.06, (D * 0.45) / Math.max(1, words.length)) }, 0.55);
+      const after = 0.55 + Math.min(0.06, (D * 0.45) / Math.max(1, words.length)) * words.length + 0.2;
+      tl.fromTo("#name", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out" }, after);
+      tl.fromTo("#result", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)" }, after + 0.15);
+      tl.to("#scene > *", { opacity: 0, duration: 0.4, ease: "power2.in" }, D - 0.45);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

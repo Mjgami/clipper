@@ -1,0 +1,34 @@
+{
+  "default": {
+    "label": "Default dark (edit me)",
+    "bg": "#121212",
+    "surface": "#1E1E1E",
+    "cardText": "#F5F5F5",
+    "text": "#F5F5F5",
+    "muted": "#A8A8A8",
+    "accent": "#FFD60A",
+    "accentInk": "#121212",
+    "fontDisplay": "Montserrat",
+    "fontBody": "Montserrat",
+    "displayWeight": 700,
+    "displayCase": "none",
+    "radius": 14,
+    "captionStyle": "bold"
+  },
+  "paper": {
+    "label": "Paper / documentary",
+    "bg": "#ECE4D2",
+    "surface": "#FBF8F1",
+    "cardText": "#1B1A17",
+    "text": "#1B1A17",
+    "muted": "#6B6455",
+    "accent": "#FFD233",
+    "accentInk": "#1B1A17",
+    "fontDisplay": "Inter Tight",
+    "fontBody": "Inter Tight",
+    "displayWeight": 800,
+    "displayCase": "none",
+    "radius": 8,
+    "captionStyle": "soft"
+  }
+}

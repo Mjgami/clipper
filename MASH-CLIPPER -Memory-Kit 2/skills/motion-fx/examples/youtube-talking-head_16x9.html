@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Instagram Growth Pitch</title>
+    <script src="gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight.ttf") format("truetype"); font-weight: 100 900; }
+      @font-face { font-family: "Instrument Serif"; src: url("fonts/InstrumentSerif-Italic.ttf") format("truetype"); font-style: italic; }
+      :root { --gold: #ffc24b; --ink: #0c1018; --white: #f7f8fb; --muted: rgba(247, 248, 251, 0.78); --ig: linear-gradient(45deg, #feda75, #fa7e1e 30%, #d62976 55%, #962fbf 78%, #4f5bd5); }
+      body { margin: 0; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Inter Tight", sans-serif; color: var(--white); }
+      .abs { position: absolute; }
+      .cam { position: absolute; inset: 0; transform-origin: 50% 40%; }
+      .cam video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      #patch { position: absolute; left: 440px; top: 306px; width: 205px; height: 199px; }
+      #vig { position: absolute; inset: 0; background: radial-gradient(ellipse 75% 70% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.42) 100%); }
+      #scrim { position: absolute; left: 0; right: 0; bottom: 0; height: 380px; background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,.5) 60%, rgba(0,0,0,.62)); }
+      #grain { position: absolute; inset: -60px; background: url("noise.png"); opacity: 0.07; mix-blend-mode: overlay; }
+
+      /* glass cards */
+      .card { position: absolute; width: 300px; padding: 22px 24px; box-sizing: border-box; border-radius: 26px; background: rgba(12, 16, 24, 0.72); border: 1.5px solid rgba(255, 255, 255, 0.14); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,.1); backdrop-filter: blur(18px); opacity: 0; }
+      .kick { font-size: 17px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+      .ttl { margin-top: 8px; font-size: 29px; font-weight: 800; line-height: 1.12; }
+      .stars { margin-top: 14px; display: flex; align-items: center; gap: 6px; }
+      .star { width: 30px; height: 30px; opacity: 0; }
+      .star path { fill: var(--gold); }
+      .rate { margin-left: 8px; font-weight: 800; font-size: 26px; color: var(--gold); opacity: 0; }
+      #graph > svg { display: block; width: 252px; height: 120px; margin-top: 14px; overflow: visible; }
+      .up { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 7px 14px; border-radius: 999px; background: rgba(255, 194, 75, 0.16); color: var(--gold); font-weight: 700; font-size: 20px; }
+      #ig .head { display: flex; align-items: center; gap: 16px; }
+      #ig .ring { width: 74px; height: 74px; border-radius: 50%; background: var(--ig); display: grid; place-items: center; flex: none; }
+      #ig .av { width: 64px; height: 64px; border-radius: 50%; background: #1b2230; border: 3px solid #0c1018; display: grid; place-items: center; }
+      #ig .handle { font-weight: 800; font-size: 24px; }
+      #ig .sub { font-size: 17px; color: var(--muted); margin-top: 2px; }
+      #ig .stats { display: flex; justify-content: space-between; margin-top: 18px; }
+      #ig .n { font-weight: 800; font-size: 26px; text-align: center; }
+      #ig .l { font-size: 15px; color: var(--muted); text-align: center; }
+      #ig .btn { margin-top: 16px; height: 46px; border-radius: 12px; background: #4f5bd5; display: grid; place-items: center; font-weight: 700; font-size: 20px; }
+      #organic .badge { margin-top: 14px; display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 700; }
+      #organic .dot { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,194,75,.16); display: grid; place-items: center; }
+      .chip { position: absolute; left: 1450px; width: 370px; height: 76px; padding: 0 22px 0 14px; box-sizing: border-box; border-radius: 22px; display: flex; align-items: center; gap: 14px; background: rgba(12, 16, 24, 0.74); border: 1.5px solid rgba(255,255,255,.14); box-shadow: 0 18px 44px rgba(0,0,0,.35); backdrop-filter: blur(16px); font-weight: 700; font-size: 24px; opacity: 0; }
+      .ico { width: 48px; height: 48px; border-radius: 14px; background: var(--ig); display: grid; place-items: center; flex: none; }
+      .ico svg, .dot svg { width: 26px; height: 26px; }
+      .ico path, .ico circle, .dot path { fill: none; stroke: #fff; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+      .tick { margin-left: auto; width: 34px; height: 34px; border-radius: 50%; background: var(--gold); display: grid; place-items: center; }
+      .tick svg { width: 20px; height: 20px; }
+      .tick path { fill: none; stroke: #1a1203; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+      .heart { position: absolute; width: 34px; height: 34px; opacity: 0; }
+      .heart path { fill: #ff3b6b; }
+      #traffic .bars { display: flex; align-items: flex-end; gap: 12px; height: 130px; margin-top: 16px; }
+      #traffic .bar { flex: 1; border-radius: 8px 8px 3px 3px; background: linear-gradient(to top, rgba(255,194,75,.35), var(--gold)); transform-origin: 50% 100%; }
+
+      /* kinetic captions */
+      #caps { position: absolute; left: 360px; width: 1200px; top: 862px; height: 170px; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: 14px; row-gap: 0; }
+      .cw { display: inline-block; font-family: "Instrument Serif", serif; font-style: italic; font-size: 56px; line-height: 1.05; color: #fff; text-shadow: 0 3px 16px rgba(0,0,0,.6); opacity: 0; }
+      .cw.key { font-family: "Inter Tight", sans-serif; font-style: normal; font-weight: 900; font-size: 92px; line-height: 0.95; letter-spacing: -0.03em; text-transform: uppercase; color: var(--gold); text-shadow: 0 0 28px rgba(255,194,75,.45), 0 4px 16px rgba(0,0,0,.5); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="19.2">
+      <div class="cam" id="cam">
+        <video id="src" src="talk.mp4" data-start="0" data-duration="19.2" data-track-index="0" muted playsinline></video>
+        <img id="patch" src="patch.png" alt="" />
+      </div>
+      <div id="vig"></div>
+
+      <!-- gig card (right) -->
+      <div class="card" id="gig" style="left: 1520px; top: 230px">
+        <div class="kick">Gig</div>
+        <div class="ttl">Instagram growth &amp; management</div>
+        <div class="stars" id="stars"></div>
+      </div>
+
+      <!-- growth graph (left) -->
+      <div class="card" id="graph" style="left: 100px; top: 230px">
+        <div class="kick">Account growth</div>
+        <svg viewBox="0 0 252 120">
+          <path d="M0 118 H252" stroke="rgba(255,255,255,.15)" stroke-width="2" />
+          <path id="gline" d="M4 108 C 50 104, 70 92, 104 84 S 160 60, 186 40 S 230 12, 248 6" fill="none" stroke="#ffc24b" stroke-width="6" stroke-linecap="round" />
+          <circle id="gdot" cx="248" cy="6" r="9" fill="#ffc24b" />
+        </svg>
+        <div class="up" id="gup"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 13 L9 5 L15 13" fill="none" stroke="#ffc24b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></svg>Growing every week</div>
+      </div>
+
+      <!-- instagram profile (right) -->
+      <div class="card" id="ig" style="left: 1520px; top: 230px">
+        <div class="head">
+          <div class="ring"><div class="av"><svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="12" r="7" fill="#fff" /><path d="M4 32c1.5-8 7-11.5 13-11.5S28.5 24 30 32z" fill="#fff" /></svg></div></div>
+          <div><div class="handle">@yourbrand</div><div class="sub">Instagram</div></div>
+        </div>
+        <div class="stats">
+          <div><div class="n">128</div><div class="l">Posts</div></div>
+          <div><div class="n" id="fol">2.1K</div><div class="l">Followers</div></div>
+          <div><div class="n">310</div><div class="l">Following</div></div>
+        </div>
+        <div class="btn" id="igbtn">Follow</div>
+      </div>
+
+      <!-- organic (left) -->
+      <div class="card" id="organic" style="left: 100px; top: 300px">
+        <div class="kick">What I do</div>
+        <div class="ttl">Organic interactions</div>
+        <div class="badge"><span class="dot"><svg viewBox="0 0 26 26"><path d="M13 3 L15.2 10.8 L23 13 L15.2 15.2 L13 23 L10.8 15.2 L3 13 L10.8 10.8 Z" style="stroke:#ffc24b" /></svg></span>Real people, real reach</div>
+      </div>
+
+      <!-- checklist chips (right) -->
+      <div class="chip" id="c1" style="top: 300px"><span class="ico"><svg viewBox="0 0 26 26"><circle cx="10" cy="9" r="4.5" /><path d="M2.5 23c1-5 4-7.5 7.5-7.5s6.5 2.5 7.5 7.5M20 8v8M16 12h8" /></svg></span>Following people<span class="tick"><svg viewBox="0 0 20 20"><path id="k1" d="M4.5 10.5 L8.5 14.5 L15.5 6" /></svg></span></div>
+      <div class="chip" id="c2" style="top: 396px"><span class="ico"><svg viewBox="0 0 26 26"><path d="M13 22 C 5 16, 2.5 12.5, 2.5 9 A 5 5 0 0 1 13 7 A 5 5 0 0 1 23.5 9 C 23.5 12.5, 21 16, 13 22 Z" /></svg></span>Liking content<span class="tick"><svg viewBox="0 0 20 20"><path id="k2" d="M4.5 10.5 L8.5 14.5 L15.5 6" /></svg></span></div>
+      <div class="chip" id="c3" style="top: 492px"><span class="ico"><svg viewBox="0 0 26 26"><circle cx="13" cy="13" r="9.5" stroke-dasharray="4 3" /><circle cx="13" cy="13" r="4.5" /></svg></span>Liking stories<span class="tick"><svg viewBox="0 0 20 20"><path id="k3" d="M4.5 10.5 L8.5 14.5 L15.5 6" /></svg></span></div>
+      <div id="hearts"></div>
+
+      <!-- traffic (left) -->
+      <div class="card" id="traffic" style="left: 100px; top: 260px">
+        <div class="kick">Profile traffic</div>
+        <div class="bars"><div class="bar" id="tb1" style="height: 26%"></div><div class="bar" id="tb2" style="height: 40%"></div><div class="bar" id="tb3" style="height: 55%"></div><div class="bar" id="tb4" style="height: 74%"></div><div class="bar" id="tb5" style="height: 100%"></div></div>
+        <div class="up" id="tup"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M3 13 L9 5 L15 13" fill="none" stroke="#ffc24b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></svg>More traffic</div>
+      </div>
+
+      <div id="scrim"></div>
+      <div id="caps"></div>
+      <div id="grain"></div>
+    </div>
+
+    <script>
+      const WORDS = [["Hi,",0.16,0.56],["thank",0.56,0.8],["you",0.8,0.88],["so",0.88,1.04],["much",1.04,1.28],["for",1.28,1.44],["checking",1.44,1.84],["out",1.84,2],["my",2,2.16],["gig",2.16,2.56],["on",2.56,2.8],["Fiverr.",2.8,3.6],["In",3.6,3.84],["this",3.84,4],["service,",4,4.48],["I'm",4.48,4.64],["gonna",4.64,4.96],["professionally",4.96,5.6],["grow",5.6,6],["and",6,6.16],["manage",6.16,6.64],["your",6.64,6.8],["Instagram",6.8,7.2],["account.",7.2,7.68],["What",7.68,7.92],["I",7.92,8],["will",8,8.16],["do",8.16,8.4],["exactly,",8.4,9.04],["I'll",9.04,9.36],["be",9.36,9.52],["performing",9.52,10.24],["organic",10.24,10.72],["interactions",10.72,11.44],["on",11.44,11.68],["your",11.68,11.84],["Instagram",11.84,12.32],["profile,",12.32,12.88],["such",12.88,13.12],["as",13.12,13.28],["following",13.28,13.76],["people,",13.92,14.4],["liking",14.4,14.96],["their",14.96,15.2],["content,",15.2,15.84],["liking",15.84,16.32],["their",16.32,16.56],["stories.",16.56,17.36],["This",17.36,17.6],["will",17.6,17.92],["increase",17.92,18.4],["more",18.4,18.64],["traffic,",18.64,19.2]];
+      // hand-picked key word per phrase (index into WORDS)
+      const KEYS = new Set([0, 9, 11, 17, 18, 22, 28, 32, 33, 36, 40, 44, 47, 50, 52]);
+      const qs = (s) => document.querySelector(s);
+      const tl = gsap.timeline({ paused: true });
+
+      // stars + hearts
+      const STAR = '<path d="M15 2 L18.8 10.6 L28 11.4 L21 17.6 L23.1 26.8 L15 22 L6.9 26.8 L9 17.6 L2 11.4 L11.2 10.6 Z" />';
+      for (let i = 0; i < 5; i++) qs("#stars").insertAdjacentHTML("beforeend", '<svg class="star" id="st' + i + '" viewBox="0 0 30 30">' + STAR + "</svg>");
+      qs("#stars").insertAdjacentHTML("beforeend", '<span class="rate" id="rate">5.0</span>');
+      const HEART = '<svg class="heart" id="h{i}" viewBox="0 0 34 34" style="left:{x}px;top:{y}px"><path d="M17 30 C 6 22, 2 16, 2 11 A 7 7 0 0 1 17 8 A 7 7 0 0 1 32 11 C 32 16, 28 22, 17 30 Z" /></svg>';
+      [[1450, 410], [1480, 380], [1430, 360]].forEach(([x, y], i) => qs("#hearts").insertAdjacentHTML("beforeend", HEART.replace("{i}", i).replace("{x}", x).replace("{y}", y)));
+
+      // captions: phrase = punctuation or 3 words
+      const chunks = []; let cur = [];
+      WORDS.forEach((w, i) => { cur.push(i); if (/[.,]$/.test(w[0]) || cur.length === 3) { chunks.push(cur); cur = []; } });
+      if (cur.length) chunks.push(cur);
+      chunks.forEach((idxs, ci) => {
+        const d = document.createElement("div"); d.className = "cap"; d.id = "cap" + ci;
+        d.innerHTML = idxs.map((i) => '<span class="cw' + (KEYS.has(i) ? " key" : "") + '" id="cw' + i + '">' + WORDS[i][0].replace(/[.,]$/, "") + "</span>").join("");
+        qs("#caps").appendChild(d);
+        const a = WORDS[idxs[0]][1];
+        const b = ci + 1 < chunks.length ? WORDS[chunks[ci + 1][0]][1] : 19.2;
+        idxs.forEach((i) => {
+          const key = KEYS.has(i);
+          tl.fromTo("#cw" + i, key ? { opacity: 0, scale: 0.7, filter: "blur(10px)" } : { opacity: 0, y: 20, filter: "blur(8px)" },
+            key ? { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.26, ease: "back.out(2)" } : { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.2, ease: "power2.out" }, WORDS[i][1]);
+        });
+        if (ci + 1 < chunks.length) tl.to("#cap" + ci, { opacity: 0, y: -14, filter: "blur(6px)", duration: 0.12, ease: "power2.in" }, b - 0.12);
+      });
+
+      // camera: wide 1.14 (crops watermark), punch-ins 1.3 on the face
+      const WIDE = { scale: 1.14, transformOrigin: "50% 40%" }, PUNCH = { scale: 1.3, transformOrigin: "50% 30%" };
+      tl.set("#cam", WIDE, 0);
+      tl.fromTo("#cam", { scale: 1.14 }, { scale: 1.18, duration: 3.44, ease: "sine.inOut", immediateRender: false }, 0.16);
+      tl.set("#cam", PUNCH, 3.6);
+      tl.set("#cam", WIDE, 7.68);
+      tl.set("#cam", { scale: 1.26, transformOrigin: "50% 32%" }, 9.04);
+      tl.fromTo("#cam", { scale: 1.26 }, { scale: 1.32, duration: 3.8, ease: "sine.inOut", immediateRender: false }, 9.06);
+      tl.set("#cam", WIDE, 12.88);
+      tl.set("#cam", PUNCH, 17.36);
+      tl.fromTo("#cam", { scale: 1.3 }, { scale: 1.34, duration: 1.8, ease: "sine.inOut", immediateRender: false }, 17.38);
+
+      // grain jitter (deterministic)
+      for (let f = 0, t = 0; t < 19.2; f++, t += 2 / 30) tl.set("#grain", { x: ((f * 97) % 60) - 30, y: ((f * 53) % 60) - 30 }, t);
+
+      const cardIn = (s, t, fromX) => tl.fromTo(s, { opacity: 0, x: fromX, scale: 0.92, rotationY: fromX > 0 ? -14 : 14 }, { opacity: 1, x: 0, scale: 1, rotationY: 0, duration: 0.45, ease: "expo.out", transformPerspective: 1000 }, t);
+      const cardOut = (s, t, toX) => tl.to(s, { opacity: 0, x: toX, duration: 0.22, ease: "power2.in" }, t);
+
+      // 2.16 gig card + stars
+      cardIn("#gig", 2.16, 60);
+      for (let i = 0; i < 5; i++) tl.fromTo("#st" + i, { opacity: 0, scale: 0.2, rotation: -40 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.3, ease: "back.out(3)" }, 2.8 + i * 0.07);
+      tl.fromTo("#rate", { opacity: 0, x: -10 }, { opacity: 1, x: 0, duration: 0.25 }, 3.2);
+      cardOut("#gig", 4.4, 60);
+
+      // 5.6 growth graph, 6.8 instagram profile
+      cardIn("#graph", 5.6, -60);
+      tl.fromTo("#gline", { strokeDasharray: 330, strokeDashoffset: 330 }, { strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut" }, 5.7);
+      tl.fromTo("#gdot", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.25, ease: "back.out(3)" }, 6.45);
+      tl.fromTo("#gup", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.25 }, 6.5);
+      cardIn("#ig", 6.8, 60);
+      // rolling number baked frame by frame (no onUpdate, so it renders however the engine seeks)
+      { const e = gsap.parseEase("power3.out"), n = 42; for (let i = 0; i <= n; i++) tl.set("#fol", { textContent: (2.1 + 10.3 * e(i / n)).toFixed(1) + "K" }, 6.95 + (1.4 * i) / n); }
+      tl.set("#igbtn", { textContent: "Following", backgroundColor: "rgba(255,255,255,.12)" }, 7.92);
+      cardOut("#graph", 8.9, -60);
+      cardOut("#ig", 8.9, 60);
+
+      // 10.24 organic, 11.84 profile again
+      cardIn("#organic", 10.24, -60);
+      cardIn("#ig", 11.84, 60);
+      cardOut("#organic", 12.7, -60);
+      cardOut("#ig", 12.7, 60);
+
+      // 13.28 / 14.4 / 15.84 checklist
+      [["#c1", "#k1", 13.28], ["#c2", "#k2", 14.4], ["#c3", "#k3", 15.84]].forEach(([c, k, t]) => {
+        tl.fromTo(c, { opacity: 0, x: 70, scale: 0.9 }, { opacity: 1, x: 0, scale: 1, duration: 0.35, ease: "back.out(1.6)" }, t);
+        tl.fromTo(k, { strokeDasharray: 20, strokeDashoffset: 20 }, { strokeDashoffset: 0, duration: 0.22, ease: "power2.out" }, t + 0.12);
+      });
+      [0, 1, 2].forEach((i) => {
+        const t = 14.45 + i * 0.08;
+        tl.fromTo("#h" + i, { y: 0, scale: 0.4 }, { y: -120 - i * 30, scale: 1.1, duration: 0.9, ease: "power2.out" }, t);
+        tl.fromTo("#h" + i, { opacity: 0 }, { opacity: 1, duration: 0.15 }, t);
+        tl.to("#h" + i, { opacity: 0, duration: 0.3 }, t + 0.6);
+      });
+      tl.to(["#c1", "#c2", "#c3"], { opacity: 0, x: 70, duration: 0.22, ease: "power2.in", stagger: 0.04 }, 17.2);
+
+      // 17.92 traffic
+      cardIn("#traffic", 17.6, -60);
+      [1, 2, 3, 4, 5].forEach((i) => tl.fromTo("#tb" + i, { scaleY: 0 }, { scaleY: 1, duration: 0.4, ease: "back.out(1.6)" }, 17.92 + i * 0.07));
+      tl.fromTo("#tup", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.25 }, 18.64);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

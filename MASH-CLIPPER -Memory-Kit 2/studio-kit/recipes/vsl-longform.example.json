@@ -1,0 +1,18 @@
+{
+  "name": "flywheel-vsl",
+  "input": "../inbox/tella/flywheel-vsl.mp4",
+  "brand": "default",
+  "steps": [
+    { "op": "cut", "removeWords": "w0-w14, w312-w340" },
+    { "op": "silence", "db": -38, "min": 0.6, "pad": 0.15 },
+    { "op": "graphics", "items": [
+      { "template": "lower-third", "at": 2, "duration": 5, "vars": { "name": "Speaker Name", "title": "Founder, Company" } },
+      { "template": "chapter", "at": 95, "duration": 3.5, "transparent": false, "vars": { "number": "01", "title": "Why *ugly* ads win" } },
+      { "template": "testimonial", "at": 240, "duration": 6, "transparent": false, "vars": { "image": "../../Sam_140k_in_Jan_2026_st5ila.webp", "quote": "We did *$140k* in January.", "name": "Sam", "result": "$140k / month" } }
+    ] },
+    { "op": "captions", "style": "clean", "maxWords": 7 },
+    { "op": "append", "template": "cta-endcard", "duration": 6, "vars": { "eyebrow": "Next step", "headline": "Book your *strategy* call", "button": "Book a call", "handle": "" } },
+    { "op": "mix", "music": "Fate's Symphony", "bed": -16 },
+    { "op": "export", "presets": ["youtube", "web", "master"] }
+  ]
+}

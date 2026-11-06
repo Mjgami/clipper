@@ -1,0 +1,22 @@
+{
+  "name": "video-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Claude-driven video editing pipeline: FFmpeg + HyperFrames + Tella exports + Epidemic Sound library",
+  "type": "module",
+  "bin": {
+    "studio": "scripts/studio.mjs"
+  },
+  "scripts": {
+    "studio": "node scripts/studio.mjs",
+    "doctor": "node scripts/studio.mjs doctor",
+    "music:index": "node scripts/studio.mjs music index"
+  },
+  "dependencies": {
+    "ffmpeg-static": "^5.3.0",
+    "gsap": "^3.14.2"
+  },
+  "devDependencies": {
+    "hyperframes": "0.8.143"
+  }
+}

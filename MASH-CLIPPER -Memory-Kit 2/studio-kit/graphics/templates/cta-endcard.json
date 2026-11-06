@@ -1,0 +1,11 @@
+{
+  "description": "End card: headline, call-to-action button with a pulse, and handle/URL. Holds on the last frame (no exit).",
+  "duration": 5,
+  "variables": [
+    { "id": "eyebrow", "type": "string", "label": "Eyebrow", "default": "Free training" },
+    { "id": "headline", "type": "string", "label": "Headline (*word* = accent)", "default": "Want the *exact* framework?" },
+    { "id": "button", "type": "string", "label": "Button label", "default": "Book a call" },
+    { "id": "handle", "type": "string", "label": "Handle / URL", "default": "link in bio" },
+    { "id": "size", "type": "number", "label": "Headline size (% of short side)", "default": 8.5, "min": 4, "max": 16 }
+  ]
+}

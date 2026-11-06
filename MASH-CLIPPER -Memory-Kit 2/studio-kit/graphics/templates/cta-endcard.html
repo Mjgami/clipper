@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" data-composition-variables='__VARS__'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <!--__HEAD__-->
+    <style>
+      #scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: calc(var(--u) * 8);
+      }
+      #content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: calc(var(--u) * 3.4);
+        max-width: calc(var(--u) * 92);
+      }
+      .landscape #content { max-width: calc(var(--u) * 140); }
+      #eyebrow {
+        display: block;
+        font-family: var(--fontBody);
+        font-weight: 600;
+        font-size: calc(var(--u) * 3.2);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+      #headline {
+        font-family: var(--fontDisplay);
+        font-weight: var(--displayWeight);
+        text-transform: var(--displayCase);
+        font-size: calc(var(--u) * var(--size));
+        line-height: 1.08;
+        color: var(--text);
+      }
+      .w { display: inline-block; overflow: hidden; vertical-align: bottom; }
+      .wi { display: inline-block; }
+      .accent .wi { color: var(--accent); }
+      #button {
+        display: block;
+        margin-top: calc(var(--u) * 1.6);
+        padding: calc(var(--u) * 2.4) calc(var(--u) * 6);
+        border-radius: calc(var(--u) * var(--radius) / 10.8);
+        background: var(--accent);
+        color: var(--accentInk);
+        font-family: var(--fontDisplay);
+        font-weight: 800;
+        font-size: calc(var(--u) * 4.2);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        box-shadow: 0 calc(var(--u) * 0.6) calc(var(--u) * 2) rgba(0, 0, 0, 0.35);
+      }
+      #handle {
+        display: block;
+        font-family: var(--fontBody);
+        font-weight: 500;
+        font-size: calc(var(--u) * 3.2);
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="__ORIENT__" data-composition-id="main" data-start="0" data-duration="__DUR__" data-width="__W__" data-height="__H__">
+      <div id="scene" class="clip" data-start="0" data-duration="__DUR__" data-track-index="0">
+        <div id="content">
+          <span id="eyebrow">Eyebrow</span>
+          <div id="headline">Headline</div>
+          <span id="button">Button</span>
+          <span id="handle">Handle</span>
+        </div>
+      </div>
+    </div>
+    <script>
+      const v = Kit.vars();
+      Kit.setup(v);
+      const D = Kit.duration();
+      const words = Kit.words(document.getElementById("headline"), v.headline);
+      Kit.text(document.getElementById("eyebrow"), v.eyebrow);
+      Kit.text(document.getElementById("button"), v.button);
+      Kit.text(document.getElementById("handle"), v.handle);
+      ["eyebrow", "button", "handle"].forEach((k) => { if (!v[k]) document.getElementById(k).style.display = "none"; });
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#eyebrow", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0.05);
+      tl.fromTo(words, { yPercent: 115 }, { yPercent: 0, duration: 0.55, ease: "power3.out", stagger: 0.07 }, 0.2);
+      const btnAt = 0.3 + words.length * 0.07 + 0.3;
+      tl.fromTo("#button", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(2.2)" }, btnAt);
+      tl.to("#button", { scale: 1.06, duration: 0.25, ease: "power1.inOut", yoyo: true, repeat: 1 }, btnAt + 1.1);
+      tl.fromTo("#handle", { opacity: 0 }, { opacity: 1, duration: 0.5 }, btnAt + 0.35);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "ugly-ads-reel",
+  "input": "../inbox/tella/ugly-ads.mp4",
+  "brand": "default",
+  "steps": [
+    { "op": "cut", "keep": "41.2-44.8, 0-41.2, 44.8-58" },
+    { "op": "silence", "db": -35, "min": 0.35, "pad": 0.1 },
+    { "op": "reframe", "to": "9:16", "mode": "crop", "focus": 0.5 },
+    { "op": "captions", "style": "bold" },
+    { "op": "graphics", "items": [
+      { "template": "hook-title", "at": 0, "duration": 2.8, "vars": { "eyebrow": "Creative strategy", "headline": "Ugly ads *beat* beautiful ads", "position": "top", "size": 8.5 } },
+      { "template": "stat-callout", "at": 14, "duration": 3.5, "vars": { "value": 250000, "prefix": "$", "label": "In one month", "context": "", "position": "top", "size": 14 } }
+    ] },
+    { "op": "append", "template": "cta-endcard", "duration": 3.5, "vars": { "eyebrow": "Free training", "headline": "Want the *exact* framework?", "button": "Book a call", "handle": "link in bio" } },
+    { "op": "mix", "music": "Fate's Symphony", "bed": -11, "sfx": ["whoosh medium@0.1", "pops glass@14.2"] },
+    { "op": "export", "presets": ["reels", "feed"] }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Big hook headline with word-by-word reveal. Wrap words in *asterisks* for accent colour. Full-frame card or transparent overlay on footage.",
+  "duration": 3.5,
+  "variables": [
+    { "id": "eyebrow", "type": "string", "label": "Eyebrow (small label above)", "default": "Creative strategy" },
+    { "id": "headline", "type": "string", "label": "Headline (*word* = accent)", "default": "Ugly ads *beat* beautiful ads" },
+    { "id": "sub", "type": "string", "label": "Sub line", "default": "" },
+    { "id": "size", "type": "number", "label": "Headline size (% of short side)", "default": 9.5, "min": 4, "max": 18 },
+    { "id": "rule", "type": "boolean", "label": "Accent rule under headline", "default": true },
+    { "id": "exit", "type": "boolean", "label": "Animate out at the end", "default": true },
+    { "id": "position", "type": "enum", "label": "Vertical position", "default": "center", "options": [{ "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] }
+  ]
+}

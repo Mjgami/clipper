@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Not How I Work</title>
+    <script src="gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight.ttf") format("truetype"); font-weight: 100 900; }
+      @font-face { font-family: "Instrument Serif"; src: url("fonts/InstrumentSerif-Italic.ttf") format("truetype"); font-style: italic; }
+      :root { --ink: #111111; --cobalt: #2b4bff; --gold: #e8b04a; --red: #e5262b; --paper: #ffffff; }
+      body { margin: 0; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #000; font-family: "Inter Tight", sans-serif; }
+      .cam { position: absolute; inset: 0; transform-origin: 56% 42%; }
+      .cam video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .layer { position: absolute; inset: 0; pointer-events: none; }
+
+      /* kinetic words */
+      .lead { position: absolute; left: 150px; width: 780px; text-align: center; font-family: "Instrument Serif", serif; font-style: italic; font-size: 72px; line-height: 1; color: var(--ink); opacity: 0; }
+      .big { position: absolute; left: 150px; width: 780px; text-align: center; font-weight: 900; letter-spacing: -0.03em; line-height: 0.9; text-transform: uppercase; opacity: 0; }
+      #hope { top: 650px; font-size: 270px; color: var(--red); }
+      #strike { position: absolute; left: 190px; top: 765px; width: 700px; height: 22px; border-radius: 11px; background: var(--ink); transform-origin: 0 50%; }
+      #work { top: 370px; font-size: 280px; color: var(--cobalt); text-shadow: 0 0 40px rgba(43, 75, 255, 0.45); }
+      #listing { top: 400px; font-size: 160px; color: var(--ink); }
+      #pray { top: 330px; font-size: 170px; color: var(--ink); }
+      #pray .amp { color: var(--red); }
+      #buyers { top: 350px; font-size: 168px; color: var(--cobalt); text-shadow: 0 0 40px rgba(43, 75, 255, 0.4); }
+
+      /* chips */
+      #chips { position: absolute; left: 150px; top: 290px; width: 780px; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
+      .chip { display: flex; align-items: center; gap: 14px; padding: 14px 30px 14px 14px; border-radius: 999px; background: rgba(17, 17, 17, 0.86); color: #fff; font-weight: 600; font-size: 38px; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18); opacity: 0; }
+      .tick { width: 50px; height: 50px; border-radius: 50%; background: var(--cobalt); display: grid; place-items: center; flex: none; }
+      .tick svg, .xmark svg { width: 30px; height: 30px; }
+      .tick path, .xmark path { fill: none; stroke: #fff; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      #nochip { position: absolute; left: 0; right: 0; top: 700px; display: flex; justify-content: center; }
+      #nochip .chip { padding-right: 34px; }
+      .xmark { width: 50px; height: 50px; border-radius: 50%; background: var(--red); display: grid; place-items: center; flex: none; }
+
+      /* MLS card */
+      #mls { position: absolute; left: 150px; top: 600px; width: 320px; padding: 30px 30px 28px; border-radius: 34px; background: rgba(17, 17, 17, 0.88); color: #fff; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22); opacity: 0; }
+      #mls .t { font-weight: 900; font-size: 78px; letter-spacing: -0.02em; line-height: 1; }
+      #mls .w { margin-top: 14px; display: flex; align-items: center; gap: 12px; font-weight: 500; font-size: 36px; color: rgba(255, 255, 255, 0.75); position: relative; }
+      #mls .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255, 255, 255, 0.75); }
+      #mls .wstrike { position: absolute; left: 0; top: 50%; width: 200px; height: 5px; margin-top: -2px; background: var(--red); transform-origin: 0 50%; }
+      #mls .xmark { position: absolute; right: -22px; top: -22px; width: 64px; height: 64px; opacity: 0; }
+
+      /* target + buyers */
+      #target { position: absolute; left: 160px; top: 780px; width: 220px; height: 220px; opacity: 0; }
+      #target svg { width: 100%; height: 100%; overflow: visible; }
+      .av { position: absolute; width: 84px; height: 84px; border-radius: 50%; background: var(--ink); border: 4px solid #fff; display: grid; place-items: center; opacity: 0; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2); }
+      .av svg { width: 46px; height: 46px; }
+
+      /* kinetic captions: serif italic lead words + one big bold key word, no boxes */
+      #scrim { position: absolute; left: 0; right: 0; top: 1020px; height: 900px; background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.42) 45%, rgba(0,0,0,.55) 100%); }
+      #caps { position: absolute; left: 150px; width: 780px; top: 1230px; height: 280px; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: 16px; row-gap: 4px; }
+      .cw { display: inline-block; font-family: "Instrument Serif", serif; font-style: italic; font-size: 64px; line-height: 1.05; color: #fff; text-shadow: 0 3px 18px rgba(0,0,0,.55), 0 0 2px rgba(0,0,0,.35); opacity: 0; }
+      .cw.key { font-family: "Inter Tight", sans-serif; font-style: normal; font-weight: 900; font-size: 104px; line-height: 0.95; letter-spacing: -0.03em; text-transform: uppercase; color: #6f86ff; text-shadow: 0 0 30px rgba(43,75,255,.55); }
+      .cw.key.neg { color: #e5262b; color: #ff4a4f; text-shadow: 0 0 28px rgba(229,38,43,.5); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="19.9">
+      <div class="cam" id="cam">
+        <video id="src" src="source20.mp4" data-start="0" data-duration="19.9" data-track-index="0" muted playsinline></video>
+        <div class="layer" id="behind">
+          <div class="big" id="hope">Hope</div>
+          <div id="strike"></div>
+        </div>
+        <video id="cut" src="cutout_hope.webm" data-start="0" data-duration="3.12" data-track-index="1" muted playsinline></video>
+      </div>
+
+      <div class="layer" id="front">
+            <div class="lead" id="lead-hope" style="top: 560px">most agents just</div>
+        <div class="lead" id="lead-work" style="top: 290px">that's not how I</div>
+        <div class="big" id="work">Work</div>
+        <div class="lead" id="lead-listing" style="top: 320px">when I take a</div>
+        <div class="big" id="listing">Listing</div>
+
+        <div id="chips"></div>
+
+        <div class="big" id="pray">Post <span class="amp">&amp;</span> Pray</div>
+        <div id="nochip"><div class="chip" id="nochip-c"><div class="xmark"><svg viewBox="0 0 30 30"><path id="nox" d="M8 8 L22 22 M22 8 L8 22" /></svg></div>not how I sell homes</div></div>
+
+        <div id="mls">
+          <div class="t">MLS</div>
+          <div class="w">waiting<span class="dot" id="d1"></span><span class="dot" id="d2"></span><span class="dot" id="d3"></span><span class="wstrike" id="wstrike"></span></div>
+          <div class="xmark" id="mlsx"><svg viewBox="0 0 30 30"><path d="M8 8 L22 22 M22 8 L8 22" /></svg></div>
+        </div>
+
+        <div class="lead" id="lead-buyers" style="top: 270px">in front of the</div>
+        <div class="big" id="buyers">Right Buyers</div>
+        <div id="target">
+          <svg viewBox="0 0 260 260">
+            <circle id="ring1" cx="130" cy="130" r="118" fill="none" stroke="#2b4bff" stroke-width="10" stroke-linecap="round" />
+            <circle id="ring2" cx="130" cy="130" r="74" fill="none" stroke="#2b4bff" stroke-width="10" stroke-linecap="round" opacity="0.6" />
+            <circle id="bull" cx="130" cy="130" r="26" fill="#2b4bff" />
+          </svg>
+        </div>
+        <div class="av" id="av1" style="left: 300px; top: 720px"></div>
+        <div class="av" id="av2" style="left: 310px; top: 960px"></div>
+        <div class="av" id="av3" style="left: 150px; top: 1010px"></div>
+
+        <div id="scrim"></div>
+        <div id="caps"></div>
+      </div>
+    </div>
+
+    <script>
+      const WORDS = [["Most",0,0.4],["agents",0.4,0.8],["will",0.8,1.04],["just",1.04,1.2],["post",1.2,1.52],["a",1.52,1.68],["listing",1.68,2],["and",2,2.16],["hope",2.16,2.48],["for",2.48,2.64],["the",2.64,2.72],["best.",2.72,3.12],["That's",3.12,3.52],["not",3.52,3.68],["how",3.68,3.92],["I",3.92,4.08],["work.",4.08,4.56],["When",4.56,4.72],["I",4.72,4.8],["take",4.8,5.04],["a",5.04,5.2],["listing,",5.2,5.76],["we're",5.76,6],["doing",6,6.4],["professional",6.4,6.96],["photos,",6.96,7.76],["videos,",7.76,8.48],["3D",8.48,9.12],["tours,",9.12,9.76],["print,",9.76,10.48],["and",10.48,10.8],["targeted",10.8,11.36],["social",11.36,11.68],["media",11.68,12.08],["ads,",12.08,12.56],["not",12.56,12.8],["just",12.8,12.96],["post",12.96,13.28],["and",13.28,13.52],["pray.",13.52,14],["I'm",14,14.16],["not",14.16,14.32],["just",14.32,14.4],["putting",14.4,14.64],["your",14.64,14.8],["home",14.8,15.04],["in",15.04,15.12],["the",15.12,15.2],["MLS",15.2,15.76],["and",15.76,15.92],["waiting.",15.92,16.4],["I'm",16.4,16.64],["making",16.64,16.88],["sure",16.88,17.12],["your",17.12,17.36],["listing",17.36,17.76],["is",17.76,17.92],["positioned",17.92,18.4],["in",18.4,18.48],["front",18.48,18.64],["of",18.64,18.8],["the",18.8,18.88],["right",18.88,19.12],["buyers.",19.12,19.84]];
+      // caption hidden while a giant key word owns the frame
+      const HIDE = [[2.16, 3.12], [4.08, 4.56], [5.2, 5.76], [12.96, 14.0], [18.88, 19.9]];
+      const CHIPS = [["Professional photos", 6.96], ["Videos", 7.76], ["3D tours", 8.48], ["Print", 9.76], ["Targeted social ads", 12.08]];
+      const PERSON = '<svg viewBox="0 0 46 46"><circle cx="23" cy="16" r="9" fill="#fff"/><path d="M6 42c2-10 9-15 17-15s15 5 17 15z" fill="#fff"/></svg>';
+
+      // build chips
+      const chipsEl = document.getElementById("chips");
+      CHIPS.forEach(([label], i) => {
+        const c = document.createElement("div");
+        c.className = "chip"; c.id = "chip" + i;
+        c.innerHTML = '<div class="tick"><svg viewBox="0 0 30 30"><path id="tk' + i + '" d="M7 15.5 L13 21 L23 9" /></svg></div>' + label;
+        chipsEl.appendChild(c);
+      });
+      ["av1", "av2", "av3"].forEach((id) => (document.getElementById(id).innerHTML = PERSON));
+
+      // build caption chunks: break on punctuation or after 3 words; the strongest word becomes the big key word
+      const STOP = new Set(["a","the","and","for","of","in","is","to","i","i'm","we're","that's","will","just","not","how","when","your","my","doing","making","sure"]);
+      const NEG = new Set(["hope","best","waiting","pray"]);
+      const capsEl = document.getElementById("caps");
+      const chunks = []; let cur = [];
+      WORDS.forEach((w, i) => { cur.push(i); if (/[.,]$/.test(w[0]) || cur.length === 3) { chunks.push(cur); cur = []; } });
+      if (cur.length) chunks.push(cur);
+      const clean = (w) => w.replace(/[.,]$/, "");
+      chunks.forEach((idxs, ci) => {
+        let key = -1, best = 0;
+        idxs.forEach((i) => { const w = clean(WORDS[i][0]).toLowerCase(); const sc = STOP.has(w) ? 0 : w.length + (/\d/.test(w) ? 5 : 0); if (sc > best) { best = sc; key = i; } });
+        const d = document.createElement("div"); d.className = "cap"; d.id = "cap" + ci;
+        d.innerHTML = idxs.map((i) => { const w = clean(WORDS[i][0]); const cls = i === key ? "cw key" + (NEG.has(w.toLowerCase()) ? " neg" : "") : "cw"; return '<span class="' + cls + '" id="cw' + i + '">' + w + "</span>"; }).join("");
+        capsEl.appendChild(d);
+      });
+
+      const tl = gsap.timeline({ paused: true });
+      const hidden = (t) => HIDE.some(([a, b]) => t >= a && t < b);
+
+      // captions: each word blurs and rises in on its own timestamp, key word pops; phrase leaves when the next starts
+      chunks.forEach((idxs, ci) => {
+        const a = WORDS[idxs[0]][1];
+        const b = ci + 1 < chunks.length ? WORDS[chunks[ci + 1][0]][1] : 19.9;
+        idxs.forEach((i) => {
+          const isKey = document.getElementById("cw" + i).classList.contains("key");
+          tl.fromTo("#cw" + i, isKey ? { opacity: 0, scale: 0.7, filter: "blur(10px)" } : { opacity: 0, y: 22, filter: "blur(8px)" },
+            isKey ? { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.26, ease: "back.out(2)" } : { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.2, ease: "power2.out" }, WORDS[i][1]);
+        });
+        tl.to("#cap" + ci, { opacity: 0, y: -16, filter: "blur(6px)", duration: 0.12, ease: "power2.in" }, b - 0.12);
+        tl.set("#cap" + ci, { opacity: 1, y: 0, filter: "blur(0px)" }, Math.max(0, a - 0.001));
+        HIDE.forEach(([h0, h1]) => { if (h1 > a && h0 < b) { tl.set("#caps", { opacity: 0 }, Math.max(h0, a)); tl.set("#caps", { opacity: 1 }, Math.min(h1, b)); } });
+      });
+
+      // camera: punch-ins and slow pushes
+      tl.set("#cam", { scale: 1 }, 0);
+      tl.set("#cam", { scale: 1.12, transformOrigin: "58% 43%" }, 3.12);
+      tl.set("#cam", { scale: 1, transformOrigin: "56% 42%" }, 4.56);
+      tl.fromTo("#cam", { scale: 1 }, { scale: 1.06, duration: 5.7, ease: "sine.inOut", immediateRender: false }, 6.4);
+      tl.set("#cam", { scale: 1, transformOrigin: "52% 42%" }, 12.56);
+      tl.set("#cam", { scale: 1.08, transformOrigin: "62% 44%" }, 14.0);
+      tl.fromTo("#cam", { scale: 1.08 }, { scale: 1.14, duration: 3.5, ease: "sine.inOut", immediateRender: false }, 16.4);
+
+      // 0-3.12  HOPE behind her, struck through
+      tl.fromTo("#lead-hope", { opacity: 0, y: 14, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.3, ease: "power2.out" }, 1.04);
+      tl.fromTo("#hope", { opacity: 0, scale: 1.25, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.3, ease: "power3.out" }, 2.16);
+      tl.fromTo("#strike", { scaleX: 0 }, { scaleX: 1, immediateRender: true, duration: 0.2, ease: "power2.inOut" }, 2.72);
+      tl.set(["#lead-hope", "#hope", "#strike"], { opacity: 0 }, 3.12);
+
+      // 3.12-4.56  WORK
+      tl.fromTo("#lead-work", { opacity: 0, y: 14, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.25, ease: "power2.out" }, 3.52);
+      tl.fromTo("#work", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2.2)" }, 4.08);
+      tl.set(["#lead-work", "#work"], { opacity: 0 }, 4.56);
+
+      // 4.56-5.76  LISTING
+      tl.fromTo("#lead-listing", { opacity: 0, y: 14, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.25, ease: "power2.out" }, 4.72);
+      tl.fromTo("#listing", { opacity: 0, y: 30, filter: "blur(12px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.3, ease: "power3.out" }, 5.2);
+      tl.to(["#lead-listing", "#listing"], { opacity: 0, y: -20, duration: 0.18, ease: "power2.in" }, 5.76);
+
+      // 6.96-12.08  checklist chips, each lands on its word
+      CHIPS.forEach(([, t], i) => {
+        tl.fromTo("#chip" + i, { opacity: 0, y: 24, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, duration: 0.32, ease: "back.out(1.8)" }, t);
+        tl.fromTo("#tk" + i, { strokeDasharray: 30, strokeDashoffset: 30 }, { strokeDashoffset: 0, duration: 0.22, ease: "power2.out" }, t + 0.1);
+      });
+      tl.to(CHIPS.map((_, i) => "#chip" + i), { opacity: 0, x: -60, duration: 0.25, ease: "power2.in", stagger: 0.03 }, 12.45);
+
+      // 12.96-14  POST & PRAY with red X chip
+      tl.fromTo("#pray", { opacity: 0, scale: 1.2, filter: "blur(12px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.3, ease: "power3.out" }, 12.96);
+      tl.fromTo("#nochip-c", { opacity: 0, y: 24, scale: 0.85 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(1.8)" }, 13.52);
+      tl.fromTo("#nox", { strokeDasharray: 40, strokeDashoffset: 40 }, { strokeDashoffset: 0, duration: 0.22, ease: "power2.out" }, 13.6);
+      tl.set(["#pray", "#nochip-c"], { opacity: 0 }, 14.0);
+
+      // 15.2-16.4  MLS waiting card
+      tl.fromTo("#mls", { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.32, ease: "back.out(1.7)" }, 15.2);
+      ["#d1", "#d2", "#d3"].forEach((d, i) => tl.fromTo(d, { opacity: 0.25 }, { opacity: 1, duration: 0.2, repeat: 3, yoyo: true, ease: "sine.inOut" }, 15.3 + i * 0.12));
+      tl.fromTo("#wstrike", { scaleX: 0 }, { scaleX: 1, immediateRender: true, duration: 0.18, ease: "power2.inOut" }, 15.92);
+      tl.fromTo("#mlsx", { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.5)" }, 15.92);
+      tl.to("#mls", { opacity: 0, x: -40, duration: 0.2, ease: "power2.in" }, 16.3);
+
+      // 18.4-19.9  RIGHT BUYERS + target + buyers
+      tl.fromTo("#lead-buyers", { opacity: 0, y: 14, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.25, ease: "power2.out" }, 18.4);
+      tl.fromTo("#buyers", { opacity: 0, scale: 1.2, filter: "blur(14px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.3, ease: "power3.out" }, 18.88);
+      tl.set("#target", { opacity: 1 }, 18.88);
+      tl.fromTo("#ring1", { strokeDasharray: 742, strokeDashoffset: 742 }, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" }, 18.88);
+      tl.fromTo("#ring2", { strokeDasharray: 465, strokeDashoffset: 465 }, { strokeDashoffset: 0, duration: 0.4, ease: "power2.out" }, 18.95);
+      tl.fromTo("#bull", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.3, ease: "back.out(2.5)" }, 19.0);
+      ["#av1", "#av2", "#av3"].forEach((a, i) => tl.fromTo(a, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, 19.2 + i * 0.08));
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

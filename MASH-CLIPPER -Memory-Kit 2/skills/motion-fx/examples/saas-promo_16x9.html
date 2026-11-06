@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Your Brand One Prompt</title>
+    <script src="gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight.ttf") format("truetype"); font-weight: 100 900; }
+      @font-face { font-family: "Instrument Serif"; src: url("fonts/InstrumentSerif-Italic.ttf") format("truetype"); font-style: italic; }
+      @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; }
+      :root { --bg: #04080f; --navy: #002847; --cyan: #1ec8ff; --blue: #2e7bff; --white: #f2f7ff; --muted: rgba(242, 247, 255, 0.82); --red: #ff4a5a; }
+      body { margin: 0; background: var(--bg); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--bg); font-family: "Inter Tight", sans-serif; color: var(--white); }
+      .abs { position: absolute; }
+
+      /* background */
+      #grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(30,200,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(30,200,255,.07) 1px, transparent 1px); background-size: 72px 72px; -webkit-mask-image: radial-gradient(ellipse 60% 70% at 50% 50%, #000 30%, transparent 75%); mask-image: radial-gradient(ellipse 60% 70% at 50% 50%, #000 30%, transparent 75%); }
+      .blob { position: absolute; border-radius: 50%; filter: blur(110px); }
+      #b1 { width: 900px; height: 900px; left: -200px; top: -200px; background: rgba(46, 123, 255, 0.55); }
+      #b2 { width: 800px; height: 800px; left: 1200px; top: 400px; background: rgba(30, 200, 255, 0.35); }
+      #b3 { width: 1000px; height: 1000px; left: 500px; top: 700px; background: rgba(0, 40, 71, 0.9); }
+      #flash { position: absolute; inset: 0; background: #dff6ff; opacity: 0; }
+
+      /* kinetic type */
+      .lead { position: absolute; left: 160px; width: 720px; display: flex; flex-wrap: wrap; justify-content: center; column-gap: 14px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 66px; line-height: 1.05; color: var(--white); }
+      .lead span { display: inline-block; opacity: 0; }
+      .big { position: absolute; left: 160px; width: 720px; text-align: center; font-weight: 900; text-transform: uppercase; letter-spacing: -0.035em; line-height: 0.92; color: var(--white); opacity: 0; }
+      .cy { color: var(--cyan); text-shadow: 0 0 40px rgba(30, 200, 255, 0.55), 0 0 90px rgba(46, 123, 255, 0.35); }
+
+      /* glass */
+      .glass { background: linear-gradient(160deg, rgba(255,255,255,.10), rgba(255,255,255,.03)); border: 1.5px solid rgba(160, 220, 255, 0.22); box-shadow: 0 30px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(22px); }
+
+      /* S1 prompt bar */
+      #plabel { left: 260px; top: 530px; width: 1400px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: 24px; letter-spacing: .3em; color: var(--muted); opacity: 0; }
+      #pbar { left: 460px; top: 580px; width: 1000px; height: 124px; border-radius: 62px; display: flex; align-items: center; padding: 0 16px 0 22px; box-sizing: border-box; gap: 18px; opacity: 0; }
+      #spark { width: 64px; height: 64px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #7fe3ff, var(--blue)); display: grid; place-items: center; flex: none; box-shadow: 0 0 30px rgba(30,200,255,.6); }
+      #ptext { flex: 1; font-family: "JetBrains Mono", monospace; font-size: 34px; color: var(--white); white-space: nowrap; overflow: hidden; }
+      #caret { display: inline-block; width: 3px; height: 36px; background: var(--cyan); vertical-align: middle; margin-left: 2px; }
+      #gen { flex: none; height: 88px; padding: 0 30px; border-radius: 44px; background: linear-gradient(135deg, #5fe0ff, var(--blue)); color: #031424; font-weight: 800; font-size: 30px; display: grid; place-items: center; box-shadow: 0 0 40px rgba(30,200,255,.45); }
+      #cursor { left: 1250px; top: 900px; width: 64px; height: 64px; opacity: 0; filter: drop-shadow(0 6px 12px rgba(0,0,0,.5)); }
+      #ripple { left: 1289px; top: 597px; width: 90px; height: 90px; border-radius: 50%; border: 4px solid var(--cyan); opacity: 0; }
+
+      /* S2 dashboard */
+      #stage { position: absolute; inset: 0; perspective: 1400px; }
+      #dash { left: 980px; top: 240px; width: 780px; height: 600px; border-radius: 36px; opacity: 0; transform-origin: 50% 50%; overflow: hidden; }
+      #dtop { position: absolute; left: 0; right: 0; top: 0; height: 60px; display: flex; align-items: center; gap: 10px; padding-left: 26px; border-bottom: 1px solid rgba(160,220,255,.14); font-family: "JetBrains Mono", monospace; font-size: 21px; color: var(--muted); }
+      .dd { width: 13px; height: 13px; border-radius: 50%; background: rgba(255,255,255,.25); }
+      #dtop .fn { margin-left: 18px; }
+      #phone { position: absolute; left: 28px; top: 84px; width: 196px; height: 348px; border-radius: 22px; background: linear-gradient(170deg, #0a3a66, #04131f 60%, #0b5a8a); border: 1.5px solid rgba(160,220,255,.25); overflow: hidden; }
+      #phone .pt { position: absolute; left: 18px; right: 18px; height: 14px; border-radius: 7px; background: rgba(255,255,255,.85); }
+      #phone .pc { position: absolute; left: 50%; top: 150px; width: 56px; height: 56px; margin-left: -28px; border-radius: 50%; background: rgba(30,200,255,.9); box-shadow: 0 0 30px rgba(30,200,255,.7); }
+      .row { position: absolute; left: 252px; width: 500px; height: 74px; border-radius: 18px; display: flex; align-items: center; gap: 18px; padding: 0 18px; box-sizing: border-box; background: rgba(255,255,255,.04); border: 1.5px solid rgba(160,220,255,.10); opacity: .28; }
+      .row .lab { width: 150px; font-family: "JetBrains Mono", monospace; font-size: 21px; letter-spacing: .12em; color: var(--muted); }
+      .row.on { }
+      .pill { font-family: "JetBrains Mono", monospace; font-size: 20px; padding: 8px 14px; border-radius: 12px; background: rgba(30,200,255,.15); color: #8fe6ff; }
+      .aa { font-weight: 800; font-size: 26px; padding: 4px 12px; border-radius: 10px; background: rgba(255,255,255,.1); }
+      .sw { width: 34px; height: 34px; border-radius: 50%; border: 2px solid rgba(255,255,255,.3); }
+      #curve { width: 250px; height: 50px; overflow: visible; }
+      #tl { position: absolute; left: 28px; right: 28px; top: 456px; height: 120px; }
+      .trk { position: absolute; left: 0; height: 20px; border-radius: 10px; transform-origin: 0 50%; }
+      #playhead { position: absolute; top: -10px; left: 0; width: 4px; height: 140px; border-radius: 2px; background: var(--white); box-shadow: 0 0 16px var(--cyan); }
+
+      /* S3 progress */
+      #prog { left: 980px; top: 375px; width: 780px; height: 330px; border-radius: 36px; opacity: 0; }
+      #prog .hd { position: absolute; left: 40px; right: 40px; top: 36px; display: flex; justify-content: space-between; font-family: "JetBrains Mono", monospace; font-size: 26px; color: var(--muted); }
+      #pct { color: var(--cyan); font-weight: 700; }
+      #track { position: absolute; left: 100px; right: 100px; top: 158px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.12); }
+      #fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--blue), var(--cyan)); box-shadow: 0 0 18px rgba(30,200,255,.7); transform-origin: 0 50%; }
+      .node { position: absolute; top: 126px; width: 72px; height: 72px; margin-left: -36px; border-radius: 50%; background: #0b1622; border: 3px solid rgba(160,220,255,.25); display: grid; place-items: center; }
+      .node .ok { position: absolute; inset: -3px; border-radius: 50%; background: linear-gradient(135deg, #5fe0ff, var(--blue)); box-shadow: 0 0 26px rgba(30,200,255,.75); opacity: 0; display: grid; place-items: center; }
+      .node svg { width: 34px; height: 34px; }
+      .node path { fill: none; stroke: #031424; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+      .nl { position: absolute; top: 226px; width: 200px; margin-left: -100px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: 23px; letter-spacing: .14em; color: var(--muted); }
+
+      /* S4 logo */
+      #logo { position: absolute; inset: 0; opacity: 0; }
+      #halo { left: 710px; top: 270px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(30,200,255,.55), rgba(46,123,255,.15) 55%, transparent 70%); filter: blur(20px); }
+      #orbit { left: 680px; top: 240px; width: 560px; height: 560px; }
+      #ring { position: absolute; inset: 0; border-radius: 50%; border: 2px dashed rgba(160,220,255,.22); }
+      .tile { position: absolute; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 26px; display: grid; place-items: center; opacity: 0; }
+      .tile svg { width: 46px; height: 46px; }
+      .tile path, .tile circle, .tile rect { fill: none; stroke: var(--cyan); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+      #icon { left: 830px; top: 390px; width: 260px; height: 260px; opacity: 0; filter: drop-shadow(0 0 40px rgba(30,200,255,.55)); }
+      #wm { left: 740px; top: 836px; width: 440px; height: 109px; opacity: 0; }
+      #wm img { width: 100%; height: 100%; display: block; }
+      #sheen { position: absolute; inset: 0; -webkit-mask-image: url("img/wordmark_white.png"); mask-image: url("img/wordmark_white.png"); -webkit-mask-size: 100% 100%; mask-size: 100% 100%; overflow: hidden; }
+      #sheenbar { position: absolute; top: -20%; left: 0; width: 160px; height: 140%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.95), transparent); transform: skewX(-20deg); }
+      #media { left: 260px; top: 962px; width: 1400px; text-align: center; font-weight: 600; font-size: 34px; letter-spacing: .6em; text-indent: .6em; color: var(--white); opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="16.6">
+      <div id="bgwrap" class="abs" style="inset: 0">
+        <div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="b3"></div>
+        <div id="grid"></div>
+      </div>
+
+      <!-- kinetic type -->
+      <div class="lead" id="lead1" style="top: 200px; left: 260px; width: 1400px"></div>
+      <div class="big cy" id="k-prompt" style="top: 284px; left: 260px; width: 1400px; font-size: 160px">One Prompt</div>
+      <div class="big cy" id="k-hook" style="top: 455px; font-size: 150px">Hook</div>
+      <div class="big cy" id="k-captions" style="top: 462px; font-size: 136px">Captions</div>
+      <div class="big cy" id="k-colors" style="top: 455px; font-size: 150px">Colors</div>
+      <div class="big cy" id="k-motion" style="top: 455px; font-size: 150px">Motion</div>
+      <div class="lead" id="lead2" style="top: 340px"></div>
+      <div class="big cy" id="k-minutes" style="top: 424px; font-size: 140px">Minutes</div>
+      <div class="lead" id="lead2b" style="top: 588px; width: 300px; left: 160px; justify-content: flex-end"></div>
+      <div class="abs" id="weeks" style="left: 488px; top: 576px; font-weight: 900; font-size: 78px; letter-spacing: -0.03em; color: var(--red); opacity: 0">
+        WEEKS<div id="wstrike" style="position: absolute; left: -6px; right: -6px; top: 44%; height: 8px; border-radius: 4px; background: var(--white); transform-origin: 0 50%"></div>
+      </div>
+      <div class="lead" id="lead3" style="top: 300px"></div>
+      <div class="big" id="k-stop" style="top: 392px; font-size: 128px">Stop the<br /></div>
+      <div class="big cy" id="k-scroll" style="top: 510px; font-size: 150px">Scroll</div>
+      <div class="lead" id="lead3b" style="top: 330px"></div>
+      <div class="big cy" id="k-sell" style="top: 410px; font-size: 250px">Sell.</div>
+      <div class="lead" id="lead4" style="top: 478px; left: 110px; width: 470px; justify-content: flex-end"></div>
+      <div class="big cy" id="k-sells" style="top: 452px; left: 1335px; width: 470px; text-align: left; font-size: 140px">Sells</div>
+
+      <!-- S1 prompt -->
+      <div class="abs" id="plabel">PROMPT</div>
+      <div class="abs glass" id="pbar">
+        <div id="spark"><svg viewBox="0 0 30 30" width="30" height="30"><path d="M15 3 L17.5 12.5 L27 15 L17.5 17.5 L15 27 L12.5 17.5 L3 15 L12.5 12.5 Z" fill="#fff" /></svg></div>
+        <div id="ptext"><span id="ptyped"></span><span id="caret"></span></div>
+        <div id="gen">Generate</div>
+      </div>
+      <div class="abs" id="ripple"></div>
+
+      <!-- S2 dashboard -->
+      <div id="stage">
+        <div class="abs glass" id="dash">
+          <div id="dtop"><span class="dd"></span><span class="dd"></span><span class="dd"></span><span class="fn">brand_ad_final.mp4</span></div>
+          <div id="phone">
+            <div class="pt" style="top: 40px; width: 120px"></div>
+            <div class="pt" style="top: 64px; width: 150px; background: rgba(30,200,255,.9)"></div>
+            <div class="pc"></div>
+            <div class="pt" style="top: 280px; width: 110px; left: 43px; height: 12px; opacity: .6"></div>
+            <div class="pt" style="top: 302px; width: 80px; left: 58px; height: 12px; opacity: .6"></div>
+          </div>
+          <div class="row" id="r1" style="top: 84px"><span class="lab">HOOK</span><span class="pill" id="r1c">0.0s → 1.5s</span></div>
+          <div class="row" id="r2" style="top: 172px"><span class="lab">CAPTIONS</span><span class="aa" id="r2a">Aa</span><span class="aa" id="r2b" style="color: var(--cyan)">KEY</span><span class="aa" id="r2c" style="font-family: 'Instrument Serif'; font-style: italic; font-weight: 400">lead</span></div>
+          <div class="row" id="r3" style="top: 260px"><span class="lab">COLORS</span><span class="sw" id="s1" style="background: #1ec8ff"></span><span class="sw" id="s2" style="background: #2e7bff"></span><span class="sw" id="s3" style="background: #002847"></span><span class="sw" id="s4" style="background: #f2f7ff"></span></div>
+          <div class="row" id="r4" style="top: 348px"><span class="lab">MOTION</span><svg id="curve" viewBox="0 0 250 50"><path id="cpath" d="M4 46 C 90 46, 110 4, 246 4" fill="none" stroke="#1ec8ff" stroke-width="5" stroke-linecap="round" /></svg></div>
+          <div id="tl">
+            <div class="trk" id="t1" style="top: 0; width: 46%; background: linear-gradient(90deg, #2e7bff, #1ec8ff)"></div>
+            <div class="trk" id="t2" style="top: 30px; left: 12%; width: 70%; background: rgba(242,247,255,.75)"></div>
+            <div class="trk" id="t3" style="top: 60px; left: 4%; width: 88%; background: linear-gradient(90deg, #002847, #1ec8ff)"></div>
+            <div class="trk" id="t4" style="top: 90px; left: 30%; width: 60%; background: rgba(30,200,255,.45)"></div>
+            <div id="playhead"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- S3 progress -->
+      <div class="abs glass" id="prog">
+        <div class="hd"><span id="rlabel">Rendering</span><span id="pct">0%</span></div>
+        <div id="track"><div id="fill"></div></div>
+        <div class="node" style="left: 100px"><div class="ok" id="ok1"><svg viewBox="0 0 34 34"><path d="M8 17.5 L14.5 24 L26 11" /></svg></div></div>
+        <div class="node" style="left: 293px"><div class="ok" id="ok2"><svg viewBox="0 0 34 34"><path d="M8 17.5 L14.5 24 L26 11" /></svg></div></div>
+        <div class="node" style="left: 487px"><div class="ok" id="ok3"><svg viewBox="0 0 34 34"><path d="M8 17.5 L14.5 24 L26 11" /></svg></div></div>
+        <div class="node" style="left: 680px"><div class="ok" id="ok4"><svg viewBox="0 0 34 34"><path d="M8 17.5 L14.5 24 L26 11" /></svg></div></div>
+        <div class="nl" id="nl1" style="left: 100px">HOOK</div>
+        <div class="nl" id="nl2" style="left: 293px">MOTION</div>
+        <div class="nl" id="nl3" style="left: 487px">SOUND</div>
+        <div class="nl" id="nl4" style="left: 680px">EXPORT</div>
+      </div>
+
+      <!-- S4 logo -->
+      <div id="logo">
+        <div class="abs" id="halo"></div>
+        <div class="abs" id="orbit">
+          <div id="ring"></div>
+          <div id="tiles"></div>
+        </div>
+        <img class="abs" id="icon" src="img/icon.png" alt="" />
+        <div class="abs" id="wm"><img src="img/wordmark.png" alt="" /><div id="sheen"><div id="sheenbar"></div></div></div>
+        <div class="abs" id="media"><span class="ml" id="ml0" style="display:inline-block">M</span><span class="ml" id="ml1" style="display:inline-block">E</span><span class="ml" id="ml2" style="display:inline-block">D</span><span class="ml" id="ml3" style="display:inline-block">I</span><span class="ml" id="ml4" style="display:inline-block">A</span></div>
+      </div>
+
+      <svg class="abs" id="cursor" viewBox="0 0 64 64"><path d="M10 6 L10 50 L22 39 L30 58 L38 54 L30 36 L46 36 Z" fill="#fff" stroke="#031424" stroke-width="3" stroke-linejoin="round" /></svg>
+      <div id="flash"></div>
+    </div>
+
+    <script>
+      const T = 1 / 30;
+      const tl = gsap.timeline({ paused: true });
+      const qs = (s) => document.querySelector(s);
+
+      // lead lines: [text, time]
+      function lead(id, words) {
+        const el = qs(id);
+        words.forEach(([w, t], i) => {
+          const s = document.createElement("span"); s.id = id.slice(1) + "w" + i; s.textContent = w; el.appendChild(s);
+          tl.fromTo(s, { opacity: 0, y: 22, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.22, ease: "power2.out" }, t);
+        });
+      }
+      const popIn = (sel, t, from = {}) => tl.fromTo(sel, { opacity: 0, scale: 0.7, filter: "blur(12px)", ...from }, { opacity: 1, scale: 1, y: 0, filter: "blur(0px)", duration: 0.28, ease: "back.out(2)" }, t);
+      const out = (sel, t, d = 0.16) => tl.to(sel, { opacity: 0, y: -24, filter: "blur(10px)", duration: d, ease: "power2.in" }, t);
+
+      // background drift (finite)
+      tl.fromTo("#b1", { x: 0, y: 0 }, { x: 220, y: 120, duration: 16.6, ease: "sine.inOut" }, 0);
+      tl.fromTo("#b2", { x: 0, y: 0 }, { x: -260, y: -160, duration: 16.6, ease: "sine.inOut" }, 0);
+      tl.fromTo("#bgwrap", { scale: 1.05 }, { scale: 1.0, duration: 16.6, ease: "none" }, 0);
+
+      /* S1  0 - 3.6  prompt */
+      lead("#lead1", [["What", 0.03], ["if", 0.32], ["your", 0.56], ["next", 0.72], ["ad", 1.04], ["took", 1.44]]);
+      popIn("#k-prompt", 2.4);
+      tl.fromTo("#plabel", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.1);
+      tl.fromTo("#pbar", { opacity: 0, y: 40, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "power3.out" }, 0.05);
+      const PROMPT = "make a 15s ad for Your Brand";
+      for (let i = 0; i <= PROMPT.length; i++) tl.set("#ptyped", { textContent: PROMPT.slice(0, i) }, 0.35 + i * 0.045);
+      for (let k = 0; k < 5; k++) { tl.set("#caret", { opacity: 0 }, 1.6 + k * 0.25); tl.set("#caret", { opacity: 1 }, 1.72 + k * 0.25); }
+      tl.fromTo("#cursor", { opacity: 0, x: 0, y: 0 }, { opacity: 1, duration: 0.15 }, 1.6);
+      tl.to("#cursor", { x: 80, y: -262, duration: 0.6, ease: "power3.inOut" }, 1.65);
+      tl.to("#cursor", { scale: 0.82, duration: 0.07, yoyo: true, repeat: 1, ease: "power2.out" }, 2.4);
+      tl.to("#gen", { scale: 0.92, duration: 0.07, yoyo: true, repeat: 1 }, 2.4);
+      tl.fromTo("#ripple", { opacity: 0.9, scale: 0.3 }, { opacity: 0, scale: 2.4, duration: 0.45, ease: "power2.out" }, 2.4);
+      tl.to("#cursor", { opacity: 0, duration: 0.15 }, 2.7);
+      out(["#lead1", "#k-prompt"], 3.4);
+      tl.to(["#pbar", "#plabel"], { opacity: 0, scale: 0.86, y: 60, filter: "blur(8px)", duration: 0.25, ease: "power2.in" }, 3.3);
+
+      /* S2  3.55 - 9.2  dashboard */
+      tl.fromTo("#dash", { opacity: 0, rotationX: 30, rotationY: -22, z: -420, x: 120 }, { opacity: 1, rotationX: 0, rotationY: 0, z: 0, x: 0, duration: 0.8, ease: "expo.out" }, 3.55);
+      tl.fromTo("#dash", { scale: 1 }, { scale: 1.07, duration: 5.2, ease: "sine.inOut", immediateRender: false }, 3.65);
+      const KW = [["#k-hook", "#r1", 3.84], ["#k-captions", "#r2", 4.4], ["#k-colors", "#r3", 5.22], ["#k-motion", "#r4", 5.94]];
+      KW.forEach(([k, r, t], i) => {
+        popIn(k, t);
+        if (i < KW.length - 1) tl.to(k, { opacity: 0, scale: 1.08, filter: "blur(10px)", duration: 0.1 }, KW[i + 1][2] - 0.08);
+        tl.to(r, { opacity: 1, borderColor: "rgba(30,200,255,.65)", boxShadow: "0 0 30px rgba(30,200,255,.25)", backgroundColor: "rgba(30,200,255,.08)", duration: 0.2 }, t);
+        tl.fromTo("#t" + (i + 1), { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.out", immediateRender: true }, t);
+      });
+      tl.fromTo("#r1c", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.25 }, 3.9);
+      ["#r2a", "#r2b", "#r2c"].forEach((s, i) => tl.fromTo(s, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.5)" }, 4.44 + i * 0.07));
+      ["#s1", "#s2", "#s3", "#s4"].forEach((s, i) => tl.fromTo(s, { scale: 0 }, { scale: 1, duration: 0.25, ease: "back.out(3)" }, 5.24 + i * 0.06));
+      tl.fromTo("#cpath", { strokeDasharray: 300, strokeDashoffset: 300 }, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" }, 5.94);
+      out("#k-motion", 6.6, 0.12);
+      lead("#lead2", [["built", 6.92], ["in", 7.2]]);
+      popIn("#k-minutes", 7.4);
+      lead("#lead2b", [["not", 7.95]]);
+      tl.fromTo("#weeks", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(2)" }, 8.18);
+      tl.fromTo("#wstrike", { scaleX: 0 }, { scaleX: 1, duration: 0.18, ease: "power2.inOut", immediateRender: true }, 8.3);
+      tl.fromTo("#playhead", { x: 0 }, { x: 716, duration: 1.7, ease: "power1.inOut" }, 6.9);
+      out(["#lead2", "#k-minutes", "#lead2b", "#weeks"], 8.95);
+      tl.to("#dash", { scale: 2.6, opacity: 0, filter: "blur(18px)", duration: 0.22, ease: "power3.in" }, 8.9);
+
+      /* S3  9.3 - 12.6  progress */
+      lead("#lead3", [["every", 9.32], ["frame,", 9.65], ["designed", 10.0], ["to", 10.48]]);
+      tl.fromTo("#prog", { opacity: 0, x: 80, rotationY: -20 }, { opacity: 1, x: 0, rotationY: 0, duration: 0.45, ease: "expo.out" }, 9.25);
+      tl.fromTo("#fill", { scaleX: 0 }, { scaleX: 1, duration: 1.8, ease: "none", immediateRender: true }, 9.32);
+      // percentage baked frame by frame (no onUpdate, so it renders however the engine seeks)
+      { const n = 54; for (let i = 0; i <= n; i++) tl.set("#pct", { textContent: Math.round((100 * i) / n) + "%" }, 9.32 + (1.8 * i) / n); }
+      [9.65, 10.0, 10.64, 11.12].forEach((t, i) => {
+        tl.fromTo("#ok" + (i + 1), { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.25, ease: "back.out(2.5)" }, t);
+        tl.to("#nl" + (i + 1), { color: "#1ec8ff", duration: 0.15 }, t);
+      });
+      tl.set("#rlabel", { textContent: "Ready" }, 11.12);
+      popIn("#k-stop", 10.64, { y: 20 });
+      popIn("#k-scroll", 11.12);
+      out(["#lead3", "#k-stop", "#k-scroll"], 11.5);
+      lead("#lead3b", [["and", 11.68]]);
+      popIn("#k-sell", 12.0, { scale: 1.5 });
+      tl.fromTo("#flash", { opacity: 0.4 }, { opacity: 0, duration: 0.35, ease: "power2.out", immediateRender: false }, 12.0);
+      tl.to("#prog", { opacity: 0.25, scale: 0.94, filter: "blur(4px)", duration: 0.3 }, 12.0);
+      out(["#lead3b", "#k-sell"], 12.5, 0.18);
+      tl.to("#prog", { opacity: 0, x: 80, duration: 0.2, ease: "power2.in" }, 12.5);
+
+      /* S4  9.2 - 15  logo */
+      const ICONS = [
+        '<svg viewBox="0 0 46 46"><path d="M16 12 L34 23 L16 34 Z" /></svg>',
+        '<svg viewBox="0 0 46 46"><path d="M10 34 L18 12 L26 34 M13 26 H23 M30 22 C30 18 38 18 38 23 V34 M38 28 C33 26 29 28 30 31 C31 35 37 34 38 30" /></svg>',
+        '<svg viewBox="0 0 46 46"><circle cx="23" cy="23" r="14" /><circle cx="17" cy="19" r="2.5" /><circle cx="27" cy="16" r="2.5" /><circle cx="30" cy="25" r="2.5" /></svg>',
+        '<svg viewBox="0 0 46 46"><path d="M8 23 H12 M16 15 V31 M21 10 V36 M26 17 V29 M31 13 V33 M36 20 V26" /></svg>',
+        '<svg viewBox="0 0 46 46"><path d="M23 7 L26 20 L39 23 L26 26 L23 39 L20 26 L7 23 L20 20 Z" /></svg>',
+        '<svg viewBox="0 0 46 46"><path d="M23 8 V28 M15 20 L23 28 L31 20 M10 36 H36" /></svg>'
+      ];
+      const tilesEl = qs("#tiles");
+      ICONS.forEach((svg, i) => {
+        const a = (i / ICONS.length) * Math.PI * 2 - Math.PI / 3;
+        const d = document.createElement("div"); d.className = "tile glass"; d.id = "tile" + i; d.innerHTML = svg;
+        d.style.left = 280 + Math.cos(a) * 280 + "px"; d.style.top = 280 + Math.sin(a) * 280 + "px";
+        tilesEl.appendChild(d);
+      });
+      tl.set("#logo", { opacity: 1 }, 12.72);
+      tl.fromTo("#halo", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power3.out" }, 12.8);
+      tl.fromTo("#icon", { opacity: 0, scale: 0.4, rotation: -30, filter: "blur(16px)" }, { opacity: 1, scale: 1, rotation: 0, filter: "blur(0px)", duration: 0.5, ease: "back.out(1.8)" }, 13.0);
+      tl.fromTo("#ring", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, 13.02);
+      ICONS.forEach((_, i) => tl.fromTo("#tile" + i, { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2.2)" }, 13.1 + i * 0.06));
+      tl.fromTo("#orbit", { rotation: 0 }, { rotation: 60, duration: 3.9, ease: "none" }, 12.7);
+      ICONS.forEach((_, i) => tl.fromTo("#tile" + i, { rotation: 0 }, { rotation: -60, duration: 3.9, ease: "none", immediateRender: false }, 12.7));
+      tl.fromTo("#wm", { opacity: 0, y: 40, filter: "blur(14px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.45, ease: "power3.out" }, 13.15);
+      tl.set("#media", { opacity: 1 }, 13.76);
+      [0,1,2,3,4].forEach((i) => tl.fromTo("#ml" + i, { opacity: 0, x: (i - 2) * 40, filter: "blur(6px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.6, ease: "power3.out" }, 13.76));
+      lead("#lead4", [["motion", 14.52], ["that", 15.04]]);
+      popIn("#k-sells", 15.36);
+      tl.fromTo("#sheenbar", { x: -220 }, { x: 760, duration: 0.9, ease: "power2.inOut" }, 15.7);
+      tl.fromTo("#icon", { scale: 1 }, { scale: 1.06, duration: 0.5, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false }, 15.7);
+      tl.fromTo("#logo", { scale: 1 }, { scale: 1.04, duration: 3.9, ease: "sine.out", immediateRender: false }, 12.72);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

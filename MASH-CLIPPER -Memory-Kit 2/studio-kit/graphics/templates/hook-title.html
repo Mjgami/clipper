@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-composition-variables='__VARS__'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <!--__HEAD__-->
+    <style>
+      #scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: calc(var(--u) * 10) calc(var(--u) * 7);
+      }
+      .pos-top #scene { align-items: flex-start; padding-top: calc(var(--u) * 16); }
+      .pos-bottom #scene { align-items: flex-end; padding-bottom: calc(var(--u) * 28); }
+      #content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        max-width: calc(var(--u) * 92);
+      }
+      .landscape #content { max-width: calc(var(--u) * 150); }
+      #eyebrow {
+        display: block;
+        overflow: hidden;
+        font-family: var(--fontBody);
+        font-weight: 600;
+        font-size: calc(var(--u) * 3.2);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: calc(var(--u) * 2.6);
+      }
+      #eyebrow-in { display: block; }
+      #headline {
+        font-family: var(--fontDisplay);
+        font-weight: var(--displayWeight);
+        text-transform: var(--displayCase);
+        font-size: calc(var(--u) * var(--size));
+        line-height: 1.06;
+        letter-spacing: -0.01em;
+        color: var(--text);
+      }
+      #rule {
+        display: block;
+        width: calc(var(--u) * 14);
+        height: calc(var(--u) * 0.8);
+        border-radius: calc(var(--u) * 0.4);
+        background: var(--accent);
+        margin-top: calc(var(--u) * 3.2);
+      }
+      #sub {
+        display: block;
+        font-family: var(--fontBody);
+        font-weight: 500;
+        font-size: calc(var(--u) * 3.8);
+        line-height: 1.3;
+        color: var(--muted);
+        margin-top: calc(var(--u) * 3);
+      }
+      .is-transparent #eyebrow,
+      .is-transparent #headline,
+      .is-transparent #sub { text-shadow: 0 0.04em 0.2em rgba(0, 0, 0, 0.5); }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="__ORIENT__" data-composition-id="main" data-start="0" data-duration="__DUR__" data-width="__W__" data-height="__H__">
+      <div id="scene" class="clip" data-start="0" data-duration="__DUR__" data-track-index="0">
+        <div id="content">
+          <span id="eyebrow" data-layout-allow-overflow><span id="eyebrow-in">Eyebrow</span></span>
+          <div id="headline">Headline</div>
+          <span id="rule"></span>
+          <span id="sub">Sub line</span>
+        </div>
+      </div>
+    </div>
+    <script>
+      const v = Kit.vars();
+      Kit.setup(v);
+      const D = Kit.duration();
+      const words = Kit.words(document.getElementById("headline"), v.headline);
+      Kit.text(document.getElementById("eyebrow-in"), v.eyebrow);
+      Kit.text(document.getElementById("sub"), v.sub);
+      if (!v.eyebrow) document.getElementById("eyebrow").style.display = "none";
+      if (!v.sub) document.getElementById("sub").style.display = "none";
+      if (!v.rule) document.getElementById("rule").style.display = "none";
+
+      const tl = gsap.timeline({ paused: true });
+      const wordsEnd = 0.25 + words.length * 0.07 + 0.45;
+      tl.fromTo("#content", { scale: 1 }, { scale: 1.035, duration: D, ease: "none" }, 0);
+      tl.fromTo("#eyebrow-in", { yPercent: 110 }, { yPercent: 0, duration: 0.5, ease: "power3.out" }, 0.1);
+      tl.fromTo(words, { yPercent: 115 }, { yPercent: 0, duration: 0.55, ease: "power3.out", stagger: 0.07 }, 0.25);
+      tl.fromTo("#rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.out" }, wordsEnd - 0.2);
+      tl.fromTo("#sub", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, wordsEnd - 0.1);
+      if (v.exit !== false) tl.to("#content", { opacity: 0, y: -30, duration: 0.4, ease: "power2.in" }, D - 0.45);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

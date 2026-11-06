@@ -1,0 +1,40 @@
+{
+  "name": "Client name",
+  "owner": "client",
+  "colors": {
+    "bg": "#0b0d12",
+    "text": "#ffffff",
+    "accent": "#3ee0ff",
+    "accent2": "",
+    "negative": "#ff4d4d"
+  },
+  "fonts": {
+    "display": "Inter Tight",
+    "serif": "Instrument Serif",
+    "body": "Inter Tight",
+    "files": []
+  },
+  "logo": {
+    "primary": "logo.png",
+    "on_dark": "logo-white.png",
+    "icon": "icon.png",
+    "placement": "end card only"
+  },
+  "cards": {
+    "style": "dark glass",
+    "radius": 24,
+    "border": "1px rgba(255,255,255,.14)",
+    "shadow": "soft"
+  },
+  "captions": {
+    "style": "kinetic",
+    "case": "upper key word",
+    "highlight": "accent"
+  },
+  "rules": [
+    "Example: logo only on the end card",
+    "Example: key words in the accent colour, everything else white",
+    "Example: never use the competitor's colour (red)"
+  ],
+  "examples": []
+}

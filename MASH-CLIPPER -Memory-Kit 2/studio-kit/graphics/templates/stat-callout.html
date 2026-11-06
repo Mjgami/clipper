@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" data-composition-variables='__VARS__'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <!--__HEAD__-->
+    <style>
+      #scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .pos-top #scene { align-items: flex-start; padding-top: calc(var(--u) * 16); }
+      .pos-bottom #scene { align-items: flex-end; padding-bottom: calc(var(--u) * 26); }
+      #content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: calc(var(--u) * 4) calc(var(--u) * 6);
+        border-radius: calc(var(--u) * var(--radius) / 5);
+      }
+      .is-transparent #content { background: var(--bg); box-shadow: 0 calc(var(--u) * 1) calc(var(--u) * 4) rgba(0, 0, 0, 0.4); }
+      #figure {
+        display: block;
+        font-family: var(--fontDisplay);
+        font-weight: var(--displayWeight);
+        font-size: calc(var(--u) * var(--size));
+        line-height: 1;
+        letter-spacing: -0.03em;
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      #prefix, #suffix { color: var(--accent); }
+      #track {
+        display: block;
+        width: 100%;
+        height: calc(var(--u) * 0.8);
+        margin-top: calc(var(--u) * 2.6);
+        border-radius: calc(var(--u) * 0.4);
+        background: rgba(127, 127, 127, 0.25);
+        overflow: hidden;
+      }
+      #fill { display: block; width: 100%; height: 100%; background: var(--accent); }
+      #label {
+        display: block;
+        margin-top: calc(var(--u) * 2.8);
+        font-family: var(--fontBody);
+        font-weight: 700;
+        font-size: calc(var(--u) * 4);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--text);
+      }
+      #context {
+        display: block;
+        margin-top: calc(var(--u) * 1.4);
+        font-family: var(--fontBody);
+        font-weight: 500;
+        font-size: calc(var(--u) * 3.1);
+        color: var(--muted);
+        max-width: calc(var(--u) * 80);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="__ORIENT__" data-composition-id="main" data-start="0" data-duration="__DUR__" data-width="__W__" data-height="__H__">
+      <div id="scene" class="clip" data-start="0" data-duration="__DUR__" data-track-index="0">
+        <div id="content">
+          <span id="figure"><span id="prefix"></span><span id="num">0</span><span id="suffix"></span></span>
+          <span id="track"><span id="fill"></span></span>
+          <span id="label">Label</span>
+          <span id="context">Context</span>
+        </div>
+      </div>
+    </div>
+    <script>
+      const v = Kit.vars();
+      Kit.setup(v);
+      const D = Kit.duration();
+      const dec = Number(v.decimals) || 0;
+      const target = Number(v.value) || 0;
+      const fmt = (n) => n.toLocaleString("en-US", { minimumFractionDigits: dec, maximumFractionDigits: dec });
+      const num = document.getElementById("num");
+      Kit.text(document.getElementById("prefix"), v.prefix);
+      Kit.text(document.getElementById("suffix"), v.suffix);
+      Kit.text(document.getElementById("label"), v.label);
+      Kit.text(document.getElementById("context"), v.context);
+      if (!v.label) document.getElementById("label").style.display = "none";
+      if (!v.context) document.getElementById("context").style.display = "none";
+      // Reserve the final width so the layout doesn't jitter while counting.
+      num.style.minWidth = fmt(target).length * 0.62 + "em";
+      num.textContent = fmt(0);
+
+      const counter = { n: 0 };
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#content", { opacity: 0, scale: 0.86 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 0.05);
+      tl.fromTo(counter, { n: 0 }, { n: target, duration: Math.min(1.6, D * 0.45), ease: "power2.out", onUpdate: () => (num.textContent = fmt(counter.n)) }, 0.2);
+      tl.fromTo("#fill", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: Math.min(1.6, D * 0.45), ease: "power2.out" }, 0.2);
+      tl.fromTo("#label", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0.7);
+      tl.fromTo("#context", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0.9);
+      tl.to("#content", { opacity: 0, scale: 0.94, duration: 0.4, ease: "power2.in" }, D - 0.45);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

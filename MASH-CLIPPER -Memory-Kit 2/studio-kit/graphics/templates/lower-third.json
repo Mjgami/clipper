@@ -1,0 +1,10 @@
+{
+  "description": "Name + title lower third with accent bar. Transparent by default — render as MOV and overlay on footage.",
+  "duration": 5,
+  "transparent": true,
+  "variables": [
+    { "id": "name", "type": "string", "label": "Name", "default": "Your Name" },
+    { "id": "title", "type": "string", "label": "Title / credential", "default": "Founder, Your Company" },
+    { "id": "position", "type": "enum", "label": "Side", "default": "left", "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }] }
+  ]
+}

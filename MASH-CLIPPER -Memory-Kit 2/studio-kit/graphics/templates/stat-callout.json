@@ -1,0 +1,14 @@
+{
+  "description": "Big number count-up with progress bar, label and context line (revenue, ROAS, % lift, client results).",
+  "duration": 4,
+  "variables": [
+    { "id": "value", "type": "number", "label": "Number to count to", "default": 250000 },
+    { "id": "prefix", "type": "string", "label": "Prefix", "default": "$" },
+    { "id": "suffix", "type": "string", "label": "Suffix", "default": "" },
+    { "id": "decimals", "type": "number", "label": "Decimals", "default": 0, "min": 0, "max": 2 },
+    { "id": "label", "type": "string", "label": "Label", "default": "In one month" },
+    { "id": "context", "type": "string", "label": "Context line", "default": "From a single winning ad angle" },
+    { "id": "size", "type": "number", "label": "Number size (% of short side)", "default": 17, "min": 6, "max": 30 },
+    { "id": "position", "type": "enum", "label": "Vertical position", "default": "center", "options": [{ "value": "center", "label": "Center" }, { "value": "top", "label": "Top" }, { "value": "bottom", "label": "Bottom" }] }
+  ]
+}

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" data-composition-variables='__VARS__'>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=__W__, height=__H__" />
+    <!--__HEAD__-->
+    <style>
+      #scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        padding: 0 calc(var(--u) * 9);
+      }
+      #content { display: flex; flex-direction: column; gap: calc(var(--u) * 2.2); }
+      #num {
+        display: block;
+        overflow: hidden;
+        font-family: var(--fontDisplay);
+        font-weight: var(--displayWeight);
+        font-size: calc(var(--u) * 15);
+        line-height: 1;
+        color: var(--accent);
+      }
+      #num-in { display: block; }
+      #line {
+        display: block;
+        width: calc(var(--u) * 30);
+        height: calc(var(--u) * 0.5);
+        background: var(--accent);
+        border-radius: calc(var(--u) * 0.25);
+      }
+      #title {
+        font-family: var(--fontDisplay);
+        font-weight: var(--displayWeight);
+        text-transform: var(--displayCase);
+        font-size: calc(var(--u) * var(--size));
+        line-height: 1.08;
+        color: var(--text);
+        max-width: calc(var(--u) * 120);
+      }
+      .portrait #title { max-width: calc(var(--u) * 82); }
+      .w { display: inline-block; overflow: hidden; vertical-align: bottom; }
+      .wi { display: inline-block; }
+      .accent .wi { color: var(--accent); }
+      #kicker {
+        display: block;
+        font-family: var(--fontBody);
+        font-weight: 500;
+        font-size: calc(var(--u) * 3.4);
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="__ORIENT__" data-composition-id="main" data-start="0" data-duration="__DUR__" data-width="__W__" data-height="__H__">
+      <div id="scene" class="clip" data-start="0" data-duration="__DUR__" data-track-index="0">
+        <div id="content">
+          <span id="num" data-layout-allow-overflow><span id="num-in">01</span></span>
+          <span id="line"></span>
+          <div id="title">Title</div>
+          <span id="kicker">Kicker</span>
+        </div>
+      </div>
+    </div>
+    <script>
+      const v = Kit.vars();
+      Kit.setup(v);
+      const D = Kit.duration();
+      Kit.text(document.getElementById("num-in"), v.number);
+      Kit.text(document.getElementById("kicker"), v.kicker);
+      if (!v.number) document.getElementById("num").style.display = "none";
+      if (!v.kicker) document.getElementById("kicker").style.display = "none";
+      const words = Kit.words(document.getElementById("title"), v.title);
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#num-in", { yPercent: 105 }, { yPercent: 0, duration: 0.6, ease: "power3.out" }, 0.05);
+      tl.fromTo("#line", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.6, ease: "power3.inOut" }, 0.25);
+      tl.fromTo(words, { yPercent: 115 }, { yPercent: 0, duration: 0.55, ease: "power3.out", stagger: 0.06 }, 0.45);
+      tl.fromTo("#kicker", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, 0.6 + words.length * 0.06);
+      tl.to("#content", { opacity: 0, x: -40, duration: 0.45, ease: "power2.in" }, D - 0.5);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
