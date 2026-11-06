@@ -1,0 +1,66 @@
+[Script Info]
+Title: Captions
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Arial,70,&H00FFFFFF,&H000000FF,&H00000000,&H80000000,-1,0,0,0,100,100,0,0,1,4,0,2,50,50,150,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:01.04,Default,,0,0,0,,Life The I is
+Dialogue: 0,0:00:00.64,0:00:01.12,Default,,0,0,0,,spent number I one
+Dialogue: 0,0:00:01.04,0:00:02.48,Default,,0,0,0,,unfair.
+Dialogue: 0,0:00:01.04,0:00:01.44,Default,,0,0,0,,feel thing like in
+Dialogue: 0,0:00:01.28,0:00:01.84,Default,,0,0,0,,I'm life in that
+Dialogue: 0,0:00:01.84,0:00:02.64,Default,,0,0,0,,you second what marriage
+Dialogue: 0,0:00:02.64,0:00:02.88,Default,,0,0,0,,are now you going
+Dialogue: 0,0:00:02.80,0:00:03.36,Default,,0,0,0,,that to do I've
+Dialogue: 0,0:00:03.20,0:00:03.76,Default,,0,0,0,,about control the is
+Dialogue: 0,0:00:03.60,0:00:04.64,Default,,0,0,0,,let what them another
+Dialogue: 0,0:00:04.56,0:00:05.04,Default,,0,0,0,,theory Really person because
+Dialogue: 0,0:00:05.04,0:00:05.52,Default,,0,0,0,,I've terrible things how
+Dialogue: 0,0:00:05.52,0:00:07.68,Default,,0,0,0,,to happen truly to
+Dialogue: 0,0:00:06.08,0:00:06.88,Default,,0,0,0,,does, look at says,
+Dialogue: 0,0:00:06.64,0:00:07.36,Default,,0,0,0,,my whether or not
+Dialogue: 0,0:00:07.36,0:00:08.88,Default,,0,0,0,,they husband people.
+Dialogue: 0,0:00:07.84,0:00:08.48,Default,,0,0,0,,Whether or not they
+Dialogue: 0,0:00:08.48,0:00:08.96,Default,,0,0,0,,lose accept weight, him
+Dialogue: 0,0:00:08.96,0:00:09.44,Default,,0,0,0,,for or who not
+Dialogue: 0,0:00:09.28,0:00:10.32,Default,,0,0,0,,he is they get
+Dialogue: 0,0:00:09.60,0:00:10.72,Default,,0,0,0,,and who sober, whether
+Dialogue: 0,0:00:10.72,0:00:11.68,Default,,0,0,0,,or they develop a
+Dialogue: 0,0:00:11.68,0:00:12.32,Default,,0,0,0,,sense And of I've
+Dialogue: 0,0:00:12.16,0:00:12.80,Default,,0,0,0,,humor, learned how or
+Dialogue: 0,0:00:12.80,0:00:13.84,Default,,0,0,0,,not to they be
+Dialogue: 0,0:00:13.44,0:00:14.88,Default,,0,0,0,,start less processing, And
+Dialogue: 0,0:00:14.72,0:00:15.92,Default,,0,0,0,,you I've learned faster
+Dialogue: 0,0:00:15.60,0:00:16.72,Default,,0,0,0,,how or they ask
+Dialogue: 0,0:00:16.32,0:00:17.20,Default,,0,0,0,,to stop less, you
+Dialogue: 0,0:00:17.20,0:00:18.48,Default,,0,0,0,,you change him and
+Dialogue: 0,0:00:18.24,0:00:19.28,Default,,0,0,0,,another focus on person.
+Dialogue: 0,0:00:19.04,0:00:19.76,Default,,0,0,0,,the And one you
+Dialogue: 0,0:00:19.44,0:00:20.88,Default,,0,0,0,,thing I create much
+Dialogue: 0,0:00:20.24,0:00:20.40,Default,,0,0,0,,control.
+Dialogue: 0,0:00:20.40,0:00:21.20,Default,,0,0,0,,And that's me, frustration
+Dialogue: 0,0:00:21.12,0:00:21.84,Default,,0,0,0,,Mel in your Robbins.
+Dialogue: 0,0:00:21.76,0:00:22.32,Default,,0,0,0,,life can and control
+Dialogue: 0,0:00:22.32,0:00:22.96,Default,,0,0,0,,what create I think
+Dialogue: 0,0:00:22.72,0:00:23.20,Default,,0,0,0,,a lot of about.
+Dialogue: 0,0:00:23.20,0:00:24.32,Default,,0,0,0,,I tension in control
+Dialogue: 0,0:00:24.32,0:00:25.04,Default,,0,0,0,,relationships what I by
+Dialogue: 0,0:00:24.64,0:00:25.76,Default,,0,0,0,,do or wishing don't
+Dialogue: 0,0:00:25.44,0:00:26.08,Default,,0,0,0,,everybody do.
+Dialogue: 0,0:00:25.92,0:00:27.12,Default,,0,0,0,,would be I control
+Dialogue: 0,0:00:26.88,0:00:27.52,Default,,0,0,0,,different whether or not
+Dialogue: 0,0:00:27.44,0:00:29.28,Default,,0,0,0,,and I show up
+Dialogue: 0,0:00:28.00,0:00:29.52,Default,,0,0,0,,by across the compassion
+Dialogue: 0,0:00:29.44,0:00:30.08,Default,,0,0,0,,line and and trying
+Dialogue: 0,0:00:30.08,0:00:30.72,Default,,0,0,0,,to acceptance.
+Dialogue: 0,0:00:30.64,0:00:31.52,Default,,0,0,0,,everybody Or do else's
+Dialogue: 0,0:00:31.12,0:00:31.76,Default,,0,0,0,,I up problems.
+Dialogue: 0,0:00:31.60,0:00:32.80,Default,,0,0,0,,with That's judgment and
+Dialogue: 0,0:00:32.40,0:00:33.76,Default,,0,0,0,,love, that's frustration?
+Dialogue: 0,0:00:33.28,0:00:34.40,Default,,0,0,0,,control.
